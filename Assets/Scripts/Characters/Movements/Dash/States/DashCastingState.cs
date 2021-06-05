@@ -1,20 +1,24 @@
-﻿using static DashState;
-
-public class DashCastingState : State<Dash, DashState>
+﻿namespace DashAttack.Characters.Movements.Dash.States
 {
-    public DashCastingState(Dash owner, StateMachine<Dash, DashState> stateMachine) : base(owner, stateMachine)
-    {
-    }
+    using DashAttack.Utility;
+    using static DashState;
 
-    public override DashState Type => Casting;
-
-    protected override bool HasTransition()
+    public class DashCastingState : State<DashMovement, DashState>
     {
-        if (owner.DashCastingCounter >= owner.CastTime)
+        public DashCastingState(DashMovement owner, StateMachine<DashMovement, DashState> stateMachine) : base(owner, stateMachine)
         {
-            stateMachine.TransitionTo(Dashing);
-            return true;
         }
-        return false;
+
+        public override DashState Type => Casting;
+
+        protected override bool HasTransition()
+        {
+            if (owner.DashCastingCounter >= owner.CastTime)
+            {
+                stateMachine.TransitionTo(Dashing);
+                return true;
+            }
+            return false;
+        }
     }
 }

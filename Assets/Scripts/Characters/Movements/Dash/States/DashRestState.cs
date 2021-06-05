@@ -1,24 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-public class DashRestState : State<Dash, DashState>
+﻿namespace DashAttack.Characters.Movements.Dash.States
 {
-    public DashRestState(Dash owner, StateMachine<Dash, DashState> stateMachine) : base(owner, stateMachine)
-    {
-    }
+    using DashAttack.Utility;
 
-    public override DashState Type => DashState.Rest;
-
-    protected override bool HasTransition()
+    public class DashRestState : State<DashMovement, DashState>
     {
-        if (owner.Input && !owner.LastFrameInput && owner.CanDash)
+        public DashRestState(DashMovement owner, StateMachine<DashMovement, DashState> stateMachine)
+            : base(owner, stateMachine)
         {
-            stateMachine.TransitionTo(DashState.Casting);
-            return true;
         }
-        return false;
+
+        public override DashState Type => DashState.Rest;
+
+        protected override bool HasTransition()
+        {
+            if (owner.Input && !owner.LastFrameInput && owner.CanDash)
+            {
+                stateMachine.TransitionTo(DashState.Casting);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

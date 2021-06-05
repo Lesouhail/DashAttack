@@ -1,6 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public interface ICollidable
-{
-    void Collide(GameObject other);
+namespace DashAttack.Physics{
+	
+	public interface ICollidable
+	{
+	    void Collide(GameObject other);
+	}
+	
 }

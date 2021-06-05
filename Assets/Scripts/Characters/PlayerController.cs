@@ -1,71 +1,71 @@
-using UnityEngine;
-
-using static DashState;
-
-public class PlayerController : PhysicsObjects
+﻿namespace DashAttack.Characters
 {
-    [SerializeField] private LayerMask collidablesMask;
+    using DashAttack.Characters.Movements.Dash;
+    using DashAttack.Characters.Movements.Horizontal;
+    using DashAttack.Characters.Movements.Vertical;
+    using DashAttack.Extensions;
+    using DashAttack.Physics;
+    using UnityEngine;
 
-    public DashState DashState => Dash.CurrentState;
-    public VerticalState VerticalState => VerticalMovement.CurrentState;
-    public HorizontalState HorizontalState => HorizontalMovement.CurrentState;
+    using static DashAttack.Characters.Movements.Dash.DashState;
 
-    public DashState PreviousDashState => Dash.PreviousState;
-    public VerticalState PreviousVerticalState => VerticalMovement.PreviousState;
-    public HorizontalState PreviousHorizontalState => HorizontalMovement.PreviousState;
-
-    private HorizontalMovement HorizontalMovement { get; set; }
-    private VerticalMovement VerticalMovement { get; set; }
-    private Dash Dash { get; set; }
-
-    protected override void Start()
+    public class PlayerController : PhysicsObjects
     {
-        base.Start();
-        HorizontalMovement = GetComponent<HorizontalMovement>();
-        VerticalMovement = GetComponent<VerticalMovement>();
-        Dash = GetComponent<Dash>();
-    }
+        [SerializeField] private LayerMask collidablesMask;
 
-    protected override void Update()
-    {
-        base.Update();
-        if (Dash.CurrentState != Rest && Dash.PreviousState == Rest)
+        private HorizontalMovement HorizontalMovement { get; set; }
+        private VerticalMovement VerticalMovement { get; set; }
+        private DashMovement Dash { get; set; }
+
+        protected override void Start()
         {
-            HorizontalMovement.IsLocked = true;
-            VerticalMovement.IsLocked = true;
+            base.Start();
+            HorizontalMovement = GetComponent<HorizontalMovement>();
+            VerticalMovement = GetComponent<VerticalMovement>();
+            Dash = GetComponent<DashMovement>();
         }
 
-        if (Dash.CurrentState == Rest && Dash.PreviousState != Rest)
+        protected override void Update()
         {
-            VerticalMovement.IsLocked = false;
+            base.Update();
+            if (Dash.CurrentState != Rest && Dash.PreviousState == Rest)
+            {
+                HorizontalMovement.IsLocked = true;
+                VerticalMovement.IsLocked = true;
+            }
+
+            if (Dash.CurrentState == Rest && Dash.PreviousState != Rest)
+            {
+                VerticalMovement.IsLocked = false;
+            }
+
+            if (Dash.CurrentState == Rest || (Dash.CurrentState != Recovering && Dash.PreviousState != Rest))
+            {
+                HorizontalMovement.IsLocked = false;
+            }
         }
 
-        if (Dash.CurrentState == Rest || Dash.CurrentState != Recovering && Dash.PreviousState != Rest)
+        protected override bool IgnoreCollisions(GameObject other)
         {
-            HorizontalMovement.IsLocked = false;
+            if (Dash.CurrentState == Dashing && collidablesMask.ContainsLayer(other.layer))
+            {
+                OnDashHit(other);
+                return true;
+            }
+            return false;
         }
-    }
 
-    private void OnDashHit(GameObject other)
-    {
-        if (other.TryGetComponent<ICollidable>(out var collidable))
+        protected override void CollisionEntered(GameObject other)
         {
-            collidable.Collide(gameObject);
-            Dash.Reset();
         }
-    }
 
-    protected override void CollisionEntered(GameObject other)
-    {
-    }
-
-    protected override bool IgnoreCollisions(GameObject other)
-    {
-        if (Dash.CurrentState == Dashing && collidablesMask.ContainsLayer(other.layer))
+        private void OnDashHit(GameObject other)
         {
-            OnDashHit(other);
-            return true;
+            if (other.TryGetComponent<ICollidable>(out var collidable))
+            {
+                collidable.Collide(gameObject);
+                Dash.Reset();
+            }
         }
-        return false;
     }
 }

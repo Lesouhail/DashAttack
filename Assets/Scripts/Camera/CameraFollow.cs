@@ -1,71 +1,90 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class CameraFollow : PhysicsObjects
+﻿namespace DashAttack.Camera
 {
-    [SerializeField] private Transform target;
-    [SerializeField] private float horizontalSmoothTime = 0.2f;
-    [SerializeField] private float verticalSmoothTime = 0.2f;
+    using DashAttack.Characters.Movements.Dash;
+    using DashAttack.Characters.Movements.Horizontal;
+    using DashAttack.Characters.Movements.Vertical;
+    using DashAttack.Physics;
+    using UnityEngine;
 
-    [SerializeField] private Vector2 playerFrameScale;
-
-    private HorizontalMovement HorizontalMovement { get; set; }
-    private VerticalMovement VerticalMovement { get; set; }
-    private Dash Dash { get; set; }
-
-    private float currentXVelocity;
-    private float currentYVelocity;
-
-    protected override void Start()
+    public class CameraFollow : PhysicsObjects
     {
-        base.Start();
-        HorizontalMovement = target.GetComponent<HorizontalMovement>();
-        VerticalMovement = target.GetComponent<VerticalMovement>();
-        Dash = target.GetComponent<Dash>();
-    }
+        [SerializeField] private Transform target;
+        [SerializeField] private float horizontalSmoothTime = 0.2f;
+        [SerializeField] private float verticalSmoothTime = 0.2f;
 
-    protected override void Update()
-    {
-        DebugFrame();
+        [SerializeField] private Vector2 playerFrameScale;
+        [SerializeField] private bool drawDebugFrame;
 
-        Vector3 nextPosition = target.position;
-        float smoothX = transform.position.x;
-        float smoothY = transform.position.y;
+        private HorizontalMovement HorizontalMovement { get; set; }
+        private VerticalMovement VerticalMovement { get; set; }
+        private DashMovement Dash { get; set; }
 
-        bool isXOutOfFrame = Mathf.Abs(nextPosition.x - transform.position.x) > playerFrameScale.x;
-        bool isYOutOfFrame = Mathf.Abs(nextPosition.y - transform.position.y) > playerFrameScale.y;
+        private float currentXVelocity;
+        private float currentYVelocity;
 
-        if (isXOutOfFrame)
+        protected override void Start()
         {
-            smoothX = Mathf.SmoothDamp(transform.position.x, nextPosition.x, ref currentXVelocity, horizontalSmoothTime);
+            base.Start();
+            HorizontalMovement = target.GetComponent<HorizontalMovement>();
+            VerticalMovement = target.GetComponent<VerticalMovement>();
+            Dash = target.GetComponent<DashMovement>();
         }
 
-        if (VerticalMovement.CurrentState == VerticalState.Grounded)
+        private void LateUpdate()
         {
-            smoothY = Mathf.SmoothDamp(transform.position.y, nextPosition.y, ref currentYVelocity, verticalSmoothTime);
+            if (drawDebugFrame)
+            {
+                DebugFrame();
+            }
+
+            bool isOutOfFrameOnX = Mathf.Abs(target.position.x - transform.position.x) > playerFrameScale.x;
+            bool isOutOfFrameOnY = Mathf.Abs(target.position.y - transform.position.y) > playerFrameScale.y;
+
+            Vector2 deltaPosition = Vector2.zero;
+
+            if (isOutOfFrameOnX)
+            {
+                var deltaX = target.position.x - transform.position.x;
+                var directionX = Mathf.Sign(deltaX);
+                deltaPosition.x = deltaX - playerFrameScale.x * directionX;
+            }
+            else
+            {
+                var smoothX = Mathf.SmoothDamp(transform.position.x, target.position.x, ref currentXVelocity, horizontalSmoothTime);
+                deltaPosition.x = smoothX - transform.position.x;
+            }
+
+            if (isOutOfFrameOnY)
+            {
+                var deltaY = target.position.y - transform.position.y;
+                var directionY = Mathf.Sign(deltaY);
+                deltaPosition.y = deltaY - playerFrameScale.y * directionY;
+            }
+            else
+            {
+                var smoothY = Mathf.SmoothDamp(transform.position.y, target.position.y, ref currentYVelocity, verticalSmoothTime);
+                deltaPosition.y = smoothY - transform.position.y;
+            }
+
+            AddMovement(deltaPosition);
         }
 
-        var smoothedNextPosition = new Vector3(smoothX, smoothY, nextPosition.z);
-        AddMovement(smoothedNextPosition - transform.position);
-        base.Update();
-    }
+        protected override bool IgnoreCollisions(GameObject other)
+        {
+            return false;
+        }
 
-    private void DebugFrame()
-    {
-        var bottomLeft = new Vector2(transform.position.x - playerFrameScale.x, transform.position.y - playerFrameScale.y);
-        var topLeft = new Vector2(transform.position.x - playerFrameScale.x, transform.position.y + playerFrameScale.y);
-        var bottomRight = new Vector2(transform.position.x + playerFrameScale.x, transform.position.y - playerFrameScale.y);
-        var topRight = new Vector2(transform.position.x + playerFrameScale.x, transform.position.y + playerFrameScale.y);
+        private void DebugFrame()
+        {
+            var bottomLeft = new Vector2(transform.position.x - playerFrameScale.x, transform.position.y - playerFrameScale.y);
+            var topLeft = new Vector2(transform.position.x - playerFrameScale.x, transform.position.y + playerFrameScale.y);
+            var bottomRight = new Vector2(transform.position.x + playerFrameScale.x, transform.position.y - playerFrameScale.y);
+            var topRight = new Vector2(transform.position.x + playerFrameScale.x, transform.position.y + playerFrameScale.y);
 
-        Debug.DrawLine(bottomLeft, topLeft, Color.green);
-        Debug.DrawLine(topLeft, topRight, Color.green);
-        Debug.DrawLine(topRight, bottomRight, Color.green);
-        Debug.DrawLine(bottomRight, bottomLeft, Color.green);
-    }
-
-    protected override bool IgnoreCollisions(GameObject other)
-    {
-        return false;
+            Debug.DrawLine(bottomLeft, topLeft, Color.green);
+            Debug.DrawLine(topLeft, topRight, Color.green);
+            Debug.DrawLine(topRight, bottomRight, Color.green);
+            Debug.DrawLine(bottomRight, bottomLeft, Color.green);
+        }
     }
 }

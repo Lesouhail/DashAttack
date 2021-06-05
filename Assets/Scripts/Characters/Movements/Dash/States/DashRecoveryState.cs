@@ -1,29 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-public class DashRecoveryState : State<Dash, DashState>
+﻿namespace DashAttack.Characters.Movements.Dash.States
 {
-    public DashRecoveryState(Dash owner, StateMachine<Dash, DashState> stateMachine) : base(owner, stateMachine)
-    {
-    }
+    using DashAttack.Utility;
 
-    public override DashState Type => DashState.Recovering;
-
-    protected override bool HasTransition()
+    public class DashRecoveryState : State<DashMovement, DashState>
     {
-        if (owner.Input && !owner.LastFrameInput && owner.CanDash)
+        public DashRecoveryState(DashMovement owner, StateMachine<DashMovement, DashState> stateMachine) : base(owner, stateMachine)
         {
-            stateMachine.TransitionTo(DashState.Casting);
-            return true;
         }
-        if (owner.DashRecoveryCounter >= owner.RecoveryTime)
+
+        public override DashState Type => DashState.Recovering;
+
+        protected override bool HasTransition()
         {
-            stateMachine.TransitionTo(DashState.Rest);
-            return true;
+            if (owner.Input && !owner.LastFrameInput && owner.CanDash)
+            {
+                stateMachine.TransitionTo(DashState.Casting);
+                return true;
+            }
+            if (owner.DashRecoveryCounter >= owner.RecoveryTime)
+            {
+                stateMachine.TransitionTo(DashState.Rest);
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 }

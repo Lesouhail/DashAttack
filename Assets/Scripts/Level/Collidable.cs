@@ -1,40 +1,44 @@
-using System.Collections;
-using UnityEngine;
-
-public class Collidable : MonoBehaviour, ICollidable
+﻿namespace DashAttack.Levels
 {
-    public float CollisionDisablingTime { get; private set; } = 1;
-    private bool IgnoreCollisions { get; set; }
-    private SpriteRenderer Renderer { get; set; }
-    private BoxCollider2D Collider { get; set; }
+    using System.Collections;
+    using DashAttack.Physics;
+    using UnityEngine;
 
-    private void Start()
+    public class Collidable : MonoBehaviour, ICollidable
     {
-        Renderer = GetComponent<SpriteRenderer>();
-        Collider = GetComponent<BoxCollider2D>();
-    }
+        public float CollisionDisablingTime { get; private set; } = 1;
+        private bool IgnoreCollisions { get; set; }
+        private SpriteRenderer Renderer { get; set; }
+        private BoxCollider2D Collider { get; set; }
 
-    public void Collide(GameObject other)
-    {
-        if (IgnoreCollisions)
+        private void Start()
         {
-            return;
+            Renderer = GetComponent<SpriteRenderer>();
+            Collider = GetComponent<BoxCollider2D>();
         }
 
-        if (other.CompareTag("Player"))
+        public void Collide(GameObject other)
         {
-            StartCoroutine("DisableCollisions");
-        }
-    }
+            if (IgnoreCollisions)
+            {
+                return;
+            }
 
-    IEnumerator DisableCollisions()
-    {
-        IgnoreCollisions = true;
-        Renderer.enabled = false;
-        Collider.enabled = false;
-        yield return new WaitForSeconds(CollisionDisablingTime);
-        Renderer.enabled = true;
-        IgnoreCollisions = false;
-        Collider.enabled = true;
+            if (other.CompareTag("Player"))
+            {
+                StartCoroutine("DisableCollisions");
+            }
+        }
+
+        private IEnumerator DisableCollisions()
+        {
+            IgnoreCollisions = true;
+            Renderer.enabled = false;
+            Collider.enabled = false;
+            yield return new WaitForSeconds(CollisionDisablingTime);
+            Renderer.enabled = true;
+            IgnoreCollisions = false;
+            Collider.enabled = true;
+        }
     }
 }

@@ -1,24 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class PlayerFeedbacks : MonoBehaviour
+﻿namespace DashAttack.Characters
 {
-    [SerializeField] private Color noDashColor;
+    using DashAttack.Characters.Movements.Dash;
+    using UnityEngine;
 
-    private Dash Dash { get; set; }
-    private SpriteRenderer Renderer { get; set; }
-    private Color BaseColor { get; set; }
-
-    private void Start()
+    public class PlayerFeedbacks : MonoBehaviour
     {
-        Dash = GetComponent<Dash>();
-        Renderer = GetComponent<SpriteRenderer>();
-        BaseColor = Renderer.color;
-    }
+        [SerializeField] private Color noDashColor;
 
-    private void Update()
-    {
-        Renderer.color = Dash.CanDash ? BaseColor : noDashColor;
+        private DashMovement Dash { get; set; }
+        private SpriteRenderer Renderer { get; set; }
+        private Color BaseColor { get; set; }
+
+        private void Start()
+        {
+            Dash = GetComponent<DashMovement>();
+            Renderer = GetComponent<SpriteRenderer>();
+            BaseColor = Renderer.color;
+        }
+
+        private void Update()
+        {
+            Renderer.color = Dash.CanDash ? BaseColor : noDashColor;
+        }
     }
 }

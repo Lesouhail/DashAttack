@@ -1,26 +1,30 @@
-﻿using static DashState;
-
-public class DashingState : State<Dash, DashState>
+﻿namespace DashAttack.Characters.Movements.Dash.States
 {
-    public DashingState(Dash owner, StateMachine<Dash, DashState> stateMachine) : base(owner, stateMachine)
-    {
-    }
+    using DashAttack.Utility;
+    using static DashState;
 
-    public override DashState Type => DashState.Dashing;
-
-    protected override bool HasTransition()
+    public class DashingState : State<DashMovement, DashState>
     {
-        if (owner.DashCounter >= owner.DashTime)
+        public DashingState(DashMovement owner, StateMachine<DashMovement, DashState> stateMachine) : base(owner, stateMachine)
         {
-            stateMachine.TransitionTo(Recovering);
-            return true;
         }
 
-        if (owner.PhysicsComponent.Collisions.Left || owner.PhysicsComponent.Collisions.Right)
+        public override DashState Type => DashState.Dashing;
+
+        protected override bool HasTransition()
         {
-            stateMachine.TransitionTo(Rest);
-            return true;
+            if (owner.DashCounter >= owner.DashTime)
+            {
+                stateMachine.TransitionTo(Recovering);
+                return true;
+            }
+
+            if (owner.PhysicsComponent.Collisions.Left || owner.PhysicsComponent.Collisions.Right)
+            {
+                stateMachine.TransitionTo(Rest);
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 }
