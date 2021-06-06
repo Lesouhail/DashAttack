@@ -3654,6 +3654,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &1233586353 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6306988956463948792, guid: e959f1f4508bbc04aa3e987ac8be39ef, type: 3}
+  m_PrefabInstance: {fileID: 1727209205}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1233586356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233586353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1439664ad32ffb4789001e11ba52b44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1622779710 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 523209855, guid: fc8d11e14eb85ca448403146dc4e8959, type: 3}
@@ -5170,6 +5187,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1862462105, guid: fc8d11e14eb85ca448403146dc4e8959, type: 3}
+      propertyPath: fallMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3668470360987647399, guid: fc8d11e14eb85ca448403146dc4e8959, type: 3}
       propertyPath: m_Name
       value: Player

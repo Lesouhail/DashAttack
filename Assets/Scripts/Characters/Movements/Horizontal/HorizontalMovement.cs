@@ -47,11 +47,6 @@
             => (PhysicsComponent.Collisions.Left && CurrentVelocity < 0)
             || (PhysicsComponent.Collisions.Right && CurrentVelocity > 1);
 
-        public void WallJump(int direction)
-        {
-            //set velocity
-        }
-
         protected override void Start()
         {
             base.Start();
@@ -123,7 +118,7 @@
         private void WallJump()
         {
             var direction = PhysicsComponent.Collisions.Left ? 1 : -1;
-            CurrentVelocity = direction * Decceleration / Time.deltaTime * AerialModifier * VerticalMovement.JumpTime;
+            CurrentVelocity = direction * TurningForce / Time.deltaTime * AerialModifier * VerticalMovement.JumpTime;
         }
 
         private void StickToWall()
