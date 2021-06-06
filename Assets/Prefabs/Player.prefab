@@ -16,10 +16,14 @@ GameObject:
   - component: {fileID: 1862462101}
   - component: {fileID: 1862462100}
   - component: {fileID: 1862462105}
-  - component: {fileID: 1862462107}
+  - component: {fileID: 523209855}
+  - component: {fileID: 523209860}
+  - component: {fileID: 1622779709}
+  - component: {fileID: 1622779715}
+  - component: {fileID: 1622779716}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 50a7ca4358a30ff48a573b77271a8818, type: 3}
-  m_Color: {r: 0.007876454, g: 0.41422564, b: 0.5566038, a: 1}
+  m_Color: {r: 0, g: 0.50391495, b: 0.6132076, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -153,7 +157,7 @@ MonoBehaviour:
   maxVerticalVelocity: 100
   collidablesMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
 --- !u!114 &1862462101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,9 +188,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9179d7d4d5d80142890511c46512c47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 10
+  maxSpeed: 8
   accelerationTime: 0.2
-  brakingTime: 0.1
+  brakingTime: 0.15
   turningTime: 0.1
   airControlAmount: 0.8
   wallStickTime: 0.1
@@ -202,16 +206,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5dd85c3c8810f049844b5ab3ca61724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxJumpHeight: 3.6
+  maxJumpHeight: 3.1
   minJumpHeight: 1
-  jumpTime: 0.3
+  jumpTime: 0.35
   maxFallVelocity: 30
   fallMultiplier: 1.1
   jumpEarlyBuffer: 0.05
-  jumpLateBuffer: 0.2
-  wallSlideMultiplier: 0.2
-  wallStickTime: 0.15
---- !u!114 &1862462107
+  jumpLateBuffer: 0.05
+  wallSlideMultiplier: 0.3
+  wallStickTime: 0.1
+--- !u!114 &523209855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -224,9 +228,65 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dashDistance: 5
-  dashTime: 0.2
-  castTime: 0.05
-  recoveryTime: 0.1
+  dashTime: 0.15
+  castTime: 0.1
+  recoveryTime: 0.2
+--- !u!114 &523209860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3668470360987647399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57e1d6805af0f7648bd7b6c7975cd00a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &1622779709
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3668470360987647399}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5ad5cdffecb36a648833234e9df3e8b3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1622779715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3668470360987647399}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57e1d6805af0f7648bd7b6c7975cd00a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1622779716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3668470360987647399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335e1c35f63595a40adb96c996cde82c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noDashColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &5145040342608464369
 GameObject:
   m_ObjectHideFlags: 0
