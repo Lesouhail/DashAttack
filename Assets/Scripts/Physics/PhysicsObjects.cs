@@ -30,7 +30,7 @@ namespace DashAttack.Physics
         protected virtual void Start()
         {
             rb = GetComponent<Rigidbody2D>();
-            checker = GetComponent<BoxCheck>();
+            checker = GetComponent<ICollisionChecker>();
             checker.OnCollision += (other) => CollisionEntered(other);
             checker.ShouldIgnoreCollisions = (other) => IgnoreCollisions(other);
         }

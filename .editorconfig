@@ -1,0 +1,18 @@
+﻿[*.cs]
+
+# SA1028: Code should not contain trailing whitespace
+dotnet_diagnostic.SA1028.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+dotnet_diagnostic.IDE0052.severity = warning
+
+# SA1516: Elements should be separated by blank line
+dotnet_diagnostic.SA1516.severity = none
