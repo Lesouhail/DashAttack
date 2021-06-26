@@ -3,7 +3,7 @@
 namespace DashAttack.Physics
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public abstract class PhysicsObjects : MonoBehaviour
+    public abstract class PhysicsObject : MonoBehaviour
     {
         [SerializeField]
         private float maxHorizontalVelocity = 10;
@@ -12,8 +12,8 @@ namespace DashAttack.Physics
         [SerializeField]
         private ICollisionChecker checker;
 
-        private Rigidbody2D rb;
         public Collision Collisions => checker.Collisions;
+        public Collision LastFrameCollisions { get; private set; }
 
         private Vector2 deltaPosition;
         // Make sure velocity does not exceeds maximum values
@@ -29,7 +29,6 @@ namespace DashAttack.Physics
 
         protected virtual void Start()
         {
-            rb = GetComponent<Rigidbody2D>();
             checker = GetComponent<ICollisionChecker>();
             checker.OnCollision += (other) => CollisionEntered(other);
             checker.ShouldIgnoreCollisions = (other) => IgnoreCollisions(other);
@@ -56,6 +55,7 @@ namespace DashAttack.Physics
 
         protected virtual void Update()
         {
+            LastFrameCollisions = Collisions.Clone();
             CollisionCheck();
             Move();
         }
@@ -64,6 +64,6 @@ namespace DashAttack.Physics
         {
         }
 
-        protected abstract bool IgnoreCollisions(GameObject other);
+        protected virtual bool IgnoreCollisions(GameObject other) => false;
     }
 }

@@ -14,18 +14,18 @@
 
         protected override bool HasTransition()
         {
-            if (!owner.PhysicsComponent.Collisions.Left &&
-                !owner.PhysicsComponent.Collisions.Right)
+            if (!owner.PhysicsObject.Collisions.Left &&
+                !owner.PhysicsObject.Collisions.Right)
             {
                 stateMachine.TransitionTo(Falling);
                 return true;
             }
-            if (owner.PhysicsComponent.Collisions.Below)
+            if (owner.PhysicsObject.Collisions.Below)
             {
                 stateMachine.TransitionTo(Grounded);
                 return true;
             }
-            if (owner.Input && !owner.LastFrameInput)
+            if (owner.Inputs.JumpInput && owner.Inputs.JumpInputBuffer <= owner.Player.EarlyJumpBuffer)
             {
                 stateMachine.TransitionTo(Rising);
                 return true;

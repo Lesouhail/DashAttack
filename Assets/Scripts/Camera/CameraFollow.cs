@@ -6,7 +6,7 @@
     using DashAttack.Physics;
     using UnityEngine;
 
-    public class CameraFollow : PhysicsObjects
+    public class CameraFollow : PhysicsObject
     {
         [SerializeField] private Transform target;
         [SerializeField] private float horizontalSmoothTime = 0.2f;

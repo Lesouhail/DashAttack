@@ -1,6 +1,8 @@
 ﻿namespace DashAttack.Characters.Movements.Horizontal.States
 {
+    using UnityEngine;
     using DashAttack.Utility;
+    using static HorizontalState;
 
     public class RestState : State<HorizontalMovement, HorizontalState>
     {
@@ -9,13 +11,13 @@
         {
         }
 
-        public override HorizontalState Type => HorizontalState.Rest;
+        public override HorizontalState Type => Rest;
 
         protected override bool HasTransition()
         {
-            if (owner.Input != 0)
+            if (owner.Inputs.RunInput != 0)
             {
-                stateMachine.TransitionTo(HorizontalState.Accelerating);
+                stateMachine.TransitionTo(Accelerating);
                 return true;
             }
 

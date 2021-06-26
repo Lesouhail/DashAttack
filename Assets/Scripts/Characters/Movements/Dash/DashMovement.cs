@@ -37,9 +37,8 @@
             CanDash = true;
         }
 
-        protected override void Update()
+        protected void Update()
         {
-            base.Update();
             if (PhysicsComponent.Collisions.Below)
             {
                 CanDash = true;

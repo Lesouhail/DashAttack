@@ -60,7 +60,7 @@
 
                 if (debugRays)
                 {
-                    Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
+                    Debug.DrawRay(rayOrigin, directionX * rayLength * Vector2.right, Color.red);
                 }
 
                 if (hit)
@@ -97,7 +97,7 @@
 
                 if (debugRays)
                 {
-                    Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength, Color.red);
+                    Debug.DrawRay(rayOrigin, directionY * rayLength * Vector2.up, Color.red);
                 }
 
                 if (hit)

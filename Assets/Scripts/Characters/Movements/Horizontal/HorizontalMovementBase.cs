@@ -33,18 +33,12 @@
         }
 
         public float LastFrameVelocity { get; protected set; }
-        public PhysicsObjects PhysicsComponent { get; private set; }
+        public PhysicsObject PhysicsComponent { get; private set; }
 
         protected float Acceleration => maxSpeed / accelerationTime * AerialModifier * Time.deltaTime;
         protected float Decceleration => maxSpeed / brakingTime * AerialModifier * Time.deltaTime;
         protected float TurningForce => maxSpeed / turningTime * AerialModifier * Time.deltaTime;
         protected float AerialModifier => PhysicsComponent.Collisions.Below ? 1 : airControlAmount;
         private float currentVelocity;
-
-        protected override void Start()
-        {
-            base.Start();
-            PhysicsComponent = GetComponent<PhysicsObjects>();
-        }
     }
 }

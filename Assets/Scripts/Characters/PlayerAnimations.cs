@@ -55,21 +55,21 @@
             // };
         }
 
-        private void Update()
-        {
-            if (HorizontalMovement.Input != 0)
-            {
-                transform.localScale = new Vector3(
-                   Mathf.Sign(HorizontalMovement.Input),
-                   transform.localScale.y,
-                   transform.localScale.z);
-            }
+        //private void Update()
+        //{
+        //    if (HorizontalMovement.Inputs. != 0)
+        //    {
+        //        transform.localScale = new Vector3(
+        //           Mathf.Sign(HorizontalMovement.Input),
+        //           transform.localScale.y,
+        //           transform.localScale.z);
+        //    }
 
-            // if (Dash.CurrentState == Casting)
-            // {
-            //     Animator.SetFloat(DirectionX, Mathf.Abs(Dash.Direction.x));
-            //     Animator.SetFloat(DirectionY, Dash.Direction.y);
-            // }
-        }
+        //    // if (Dash.CurrentState == Casting)
+        //    // {
+        //    //     Animator.SetFloat(DirectionX, Mathf.Abs(Dash.Direction.x));
+        //    //     Animator.SetFloat(DirectionY, Dash.Direction.y);
+        //    // }
+        //}
     }
 }

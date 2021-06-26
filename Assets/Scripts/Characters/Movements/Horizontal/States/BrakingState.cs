@@ -3,6 +3,8 @@
     using DashAttack.Utility;
     using UnityEngine;
 
+    using static HorizontalState;
+
     public class BrakingState : State<HorizontalMovement, HorizontalState>
     {
         public BrakingState(HorizontalMovement owner, StateMachine<HorizontalMovement, HorizontalState> stateMachine)
@@ -10,20 +12,27 @@
         {
         }
 
-        public override HorizontalState Type => HorizontalState.Braking;
+        public override HorizontalState Type => Braking;
 
         protected override bool HasTransition()
         {
-            if (owner.CurrentVelocity == 0)
+            if (owner.Player.IsWallSticked)
             {
-                stateMachine.TransitionTo(HorizontalState.Rest);
+                stateMachine.TransitionTo(WallSticked);
                 return true;
             }
-            if (owner.Input != 0)
+
+            if (owner.CurrentVelocity == 0)
             {
-                HorizontalState nextState = Mathf.Sign(owner.CurrentVelocity) == Mathf.Sign(owner.Input)
-                                          ? HorizontalState.Accelerating
-                                          : HorizontalState.Turning;
+                stateMachine.TransitionTo(Rest);
+                return true;
+            }
+
+            if (owner.Inputs.RunInput != 0)
+            {
+                HorizontalState nextState = Mathf.Sign(owner.CurrentVelocity) == Mathf.Sign(owner.Inputs.RunInput)
+                                          ? Accelerating
+                                          : Turning;
 
                 stateMachine.TransitionTo(nextState);
                 return true;

@@ -3,9 +3,9 @@
     using DashAttack.Utility;
     using static VerticalState;
 
-    public class VerticalRestState : State<VerticalMovement, VerticalState>
+    public class RestState : State<VerticalMovement, VerticalState>
     {
-        public VerticalRestState(VerticalMovement owner, StateMachine<VerticalMovement, VerticalState> stateMachine)
+        public RestState(VerticalMovement owner, StateMachine<VerticalMovement, VerticalState> stateMachine)
             : base(owner, stateMachine)
         {
         }

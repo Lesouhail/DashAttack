@@ -20,7 +20,7 @@
         public float MaxFallVelocity => maxFallVelocity;
         public float FallMultiplier => fallMultiplier;
 
-        public PhysicsObjects PhysicsComponent { get; private set; }
+        public PhysicsObject PhysicsComponent { get; private set; }
         public virtual bool Input { get; set; }
         public float JumpStartPosition { get; protected set; }
         public float CurrentVerticalVelocity { get; protected set; }
@@ -29,11 +29,5 @@
         public virtual float JumpVelocity => Gravity * JumpTime;
 
         public virtual float DeltaPosition(float velocity) => (velocity * Time.deltaTime) + (Gravity * Mathf.Pow(Time.deltaTime, 2) / 2);
-
-        protected override void Start()
-        {
-            base.Start();
-            PhysicsComponent = GetComponent<PhysicsObjects>();
-        }
     }
 }

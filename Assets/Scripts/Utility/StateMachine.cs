@@ -60,15 +60,15 @@ namespace DashAttack.Utility
             switch (callBack)
             {
                 case StateCallBack.OnStateEnter:
-                    States[state].StateEntered = method;
+                    States[state].StateEntered += method;
                     break;
 
                 case StateCallBack.OnUpdate:
-                    States[state].StateUpdated = method;
+                    States[state].StateUpdated += method;
                     break;
 
                 case StateCallBack.OnStateExit:
-                    States[state].StateExited = method;
+                    States[state].StateExited += method;
                     break;
             }
         }

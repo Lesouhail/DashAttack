@@ -14,14 +14,14 @@
 
         protected override bool HasTransition()
         {
-            if (owner.PhysicsComponent.Collisions.Below)
+            if (owner.PhysicsObject.Collisions.Below)
             {
                 stateMachine.TransitionTo(Grounded);
                 return true;
             }
 
-            if (owner.Input && !owner.LastFrameInput &&
-                owner.LateJumpCounter <= owner.JumpLateBuffer &&
+            if (owner.Inputs.JumpInput && !owner.Inputs.LastFrameJumpInput &&
+                owner.Inputs.JumpInputBuffer <= owner.Player.LateJumpBuffer &&
                 (stateMachine.PreviousState == Grounded ||
                  stateMachine.PreviousState == WallSliding))
             {
@@ -29,8 +29,8 @@
                 return true;
             }
 
-            if (owner.PhysicsComponent.Collisions.Left ||
-                owner.PhysicsComponent.Collisions.Right)
+            if (owner.PhysicsObject.Collisions.Left ||
+                owner.PhysicsObject.Collisions.Right)
             {
                 stateMachine.TransitionTo(WallSliding);
                 return true;

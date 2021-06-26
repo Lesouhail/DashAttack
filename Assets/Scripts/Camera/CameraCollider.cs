@@ -45,7 +45,7 @@
 
             if (debugRays)
             {
-                Debug.DrawRay(rayOrigin, Vector2.right * direction * distance, Color.green);
+                Debug.DrawRay(rayOrigin, direction * distance * Vector2.right, Color.green);
             }
 
             var hit = Physics2D.Raycast(rayOrigin, Vector2.right * direction, distance, cameraLayer);
@@ -82,7 +82,7 @@
 
             if (debugRays)
             {
-                Debug.DrawRay(rayOrigin, Vector2.up * direction * distance, Color.green);
+                Debug.DrawRay(rayOrigin, direction * distance * Vector2.up, Color.green);
             }
 
             if (hit)
