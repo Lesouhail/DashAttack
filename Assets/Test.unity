@@ -908,7 +908,7 @@ MonoBehaviour:
   wallStickTime: 0.1
   maxJumpHeight: 3.6
   minJumpHeight: 1
-  jumpTime: 0.3
+  jumpTime: 0.35
   maxFallVelocity: 20
   fallMultiplier: 1.2
   wallSlideMultiplier: 1

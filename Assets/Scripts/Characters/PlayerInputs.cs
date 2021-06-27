@@ -10,6 +10,8 @@ namespace DashAttack.Characters
         public bool JumpInput { get; set; }
         public DashInput DashInput { get; set; }
 
+        public bool CanWallJump { get; set; }
+
         public float LastFrameRunInput { get; set; }
         public bool LastFrameJumpInput { get; set; }
 

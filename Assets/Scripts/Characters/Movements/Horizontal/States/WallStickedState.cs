@@ -32,16 +32,14 @@
                 return true;
             }
 
-            UnityEngine.Debug.Log(owner.Inputs.WallStickBuffer);
             if (owner.Inputs.WallStickBuffer >= owner.Player.WallStickTime)
             {
                 stateMachine.TransitionTo(Rest);
                 return true;
             }
 
-            if (owner.Inputs.JumpInput &&
-                owner.Inputs.JumpInputBuffer <= owner.Player.EarlyJumpBuffer &&
-                !owner.PhysicsObject.Collisions.Below)
+            var jumpInput = owner.Inputs.JumpInput && owner.Inputs.JumpInputBuffer <= owner.Player.EarlyJumpBuffer;
+            if (jumpInput && owner.Inputs.CanWallJump)
             {
                 stateMachine.TransitionTo(Accelerating);
                 return true;
