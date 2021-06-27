@@ -42,7 +42,7 @@
             {
                 if (PreviousState == WallSticked)
                 {
-                    //WallJump();
+                    WallJump();
                 }
             });
             Subscribe(Accelerating, OnUpdate, () => Accelerate());

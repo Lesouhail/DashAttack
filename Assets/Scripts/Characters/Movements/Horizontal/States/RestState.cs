@@ -20,7 +20,6 @@
                 stateMachine.TransitionTo(Accelerating);
                 return true;
             }
-
             return false;
         }
     }

@@ -12,6 +12,11 @@
 
         public override HorizontalState Type => WallSticked;
 
+        public override void OnStateEnter()
+        {
+            base.OnStateEnter();
+        }
+
         protected override bool HasTransition()
         {
             if (!owner.PhysicsObject.Collisions.Left &&
@@ -27,18 +32,19 @@
                 return true;
             }
 
-            UnityEngine.Debug.Log(owner.Inputs.WallStickBuffer);
             if (owner.Inputs.WallStickBuffer >= owner.Player.WallStickTime)
             {
                 stateMachine.TransitionTo(Rest);
                 return true;
             }
 
-            //if (owner.JumpInput && !owner.Player.LastFrameJumpInput)
-            //{
-            //    stateMachine.TransitionTo(HorizontalState.Accelerating);
-            //    return true;
-            //}
+            if (owner.Inputs.JumpInput &&
+                owner.Inputs.JumpInputBuffer <= owner.Player.EarlyJumpBuffer &&
+                !owner.PhysicsObject.Collisions.Below)
+            {
+                stateMachine.TransitionTo(Accelerating);
+                return true;
+            }
 
             return false;
         }

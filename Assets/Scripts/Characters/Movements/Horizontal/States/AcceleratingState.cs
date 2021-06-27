@@ -18,7 +18,7 @@
         {
             if (owner.Player.IsWallSticked)
             {
-                if (owner.Inputs.WallStickBuffer < owner.Player.WallStickTime)
+                if (owner.PreviousState != WallSticked)
                 {
                     stateMachine.TransitionTo(WallSticked);
                     return true;

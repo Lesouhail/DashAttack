@@ -905,13 +905,13 @@ MonoBehaviour:
   brakingTime: 0.1
   turningTime: 0.1
   airControlAmount: 0.8
-  wallStickTime: 0.15
+  wallStickTime: 0.1
   maxJumpHeight: 3.6
   minJumpHeight: 1
-  jumpTime: 0.35
+  jumpTime: 0.3
   maxFallVelocity: 20
   fallMultiplier: 1.2
-  wallSlideMultiplier: 0.5
+  wallSlideMultiplier: 1
   dashDistance: 0
   castTime: 0
   dashTime: 0

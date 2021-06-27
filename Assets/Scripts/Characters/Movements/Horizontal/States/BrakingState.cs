@@ -16,7 +16,9 @@
 
         protected override bool HasTransition()
         {
-            if (owner.Player.IsWallSticked)
+            bool isWallJumping = owner.Inputs.JumpInput && !owner.Inputs.LastFrameJumpInput;
+
+            if (owner.Player.IsWallSticked && !isWallJumping)
             {
                 stateMachine.TransitionTo(WallSticked);
                 return true;
