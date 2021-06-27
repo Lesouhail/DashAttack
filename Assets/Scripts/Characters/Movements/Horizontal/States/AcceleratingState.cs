@@ -16,7 +16,8 @@
 
         protected override bool HasTransition()
         {
-            if (owner.Player.IsWallSticked && !owner.IsWallJumping)
+            bool isWallStickTimeOver = owner.Inputs.WallStickBuffer >= owner.Player.WallStickTime;
+            if (owner.Player.IsOnWallAirborne && !owner.IsWallJumping && !isWallStickTimeOver)
             {
                 stateMachine.TransitionTo(WallSticked);
                 return true;

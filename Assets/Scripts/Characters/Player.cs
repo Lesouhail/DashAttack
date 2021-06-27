@@ -64,7 +64,7 @@
         public float Decceleration => maxSpeed / brakingTime * AerialModifier * Time.deltaTime;
         public float TurningForce => maxSpeed / turningTime * AerialModifier * Time.deltaTime;
         public float AerialModifier => PhysicsComponent.Collisions.Below ? 1 : airControlAmount;
-        public bool IsWallSticked
+        public bool IsOnWallAirborne
             => (PhysicsComponent.Collisions.Left || PhysicsComponent.Collisions.Right)
             && !PhysicsComponent.Collisions.Below;
 

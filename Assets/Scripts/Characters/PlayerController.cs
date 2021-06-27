@@ -73,8 +73,6 @@
             PlayerInputs.DashInput = new DashInput(
                 Inputs.Player.Dash.ReadValue<bool>(),
                 Inputs.Player.DashDirection.ReadValue<Vector2>());
-
-            Debug.Log(HorizontalMovement.CurrentState);
         }
 
         protected virtual void OnEnable()

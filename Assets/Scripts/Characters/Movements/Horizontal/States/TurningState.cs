@@ -15,7 +15,7 @@
 
         protected override bool HasTransition()
         {
-            if (owner.Player.IsWallSticked && !owner.IsWallJumping)
+            if (owner.Player.IsOnWallAirborne && !owner.IsWallJumping)
             {
                 stateMachine.TransitionTo(WallSticked);
                 return true;
