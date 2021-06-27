@@ -16,13 +16,10 @@
 
         protected override bool HasTransition()
         {
-            if (owner.Player.IsWallSticked)
+            if (owner.Player.IsWallSticked && !owner.IsWallJumping)
             {
-                if (owner.PreviousState != WallSticked)
-                {
-                    stateMachine.TransitionTo(WallSticked);
-                    return true;
-                }
+                stateMachine.TransitionTo(WallSticked);
+                return true;
             }
 
             if (owner.Inputs.RunInput == 0)

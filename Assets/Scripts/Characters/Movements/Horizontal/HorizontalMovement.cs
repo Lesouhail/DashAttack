@@ -11,6 +11,7 @@
     public class HorizontalMovement : Ability<HorizontalMovement, HorizontalState>
     {
         public float CurrentVelocity { get; private set; }
+        public bool IsWallJumping { get; private set; }
 
         public Player Player { get; private set; }
         public PlayerInputs Inputs { get; set; }
@@ -21,6 +22,11 @@
             base.Awake();
             Player = GetComponent<Player>();
             PhysicsObject = GetComponent<PhysicsObject>();
+        }
+
+        private void LateUpdate()
+        {
+            IsWallJumping = false;
         }
 
         protected override void InitStateMachine()
@@ -63,6 +69,7 @@
         {
             var direction = PhysicsObject.Collisions.Left ? 1 : -1;
             CurrentVelocity = direction * Player.TurningForce / Time.deltaTime * Player.AerialModifier * Player.JumpTime;
+            IsWallJumping = true;
         }
 
         private void Brake()

@@ -15,6 +15,12 @@
 
         protected override bool HasTransition()
         {
+            if (owner.Player.IsWallSticked && !owner.IsWallJumping)
+            {
+                stateMachine.TransitionTo(WallSticked);
+                return true;
+            }
+
             if (owner.Inputs.RunInput != 0)
             {
                 stateMachine.TransitionTo(Accelerating);
