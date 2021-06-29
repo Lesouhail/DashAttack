@@ -68,6 +68,36 @@
             => (PhysicsComponent.Collisions.Left || PhysicsComponent.Collisions.Right)
             && !PhysicsComponent.Collisions.Below;
 
+        public float GetWallJumpHorizontalVelocity()
+        {
+            float acceleration = MaxSpeed / AccelerationTime * AirControlAmount;
+            float accelerationTime = MaxSpeed / acceleration;
+
+            float timeAccelerating = JumpTime >= accelerationTime
+                ? accelerationTime
+                : JumpTime;
+
+            float timeAtApex = JumpTime - timeAccelerating >= 0
+                ? JumpTime - timeAccelerating
+                : 0;
+
+            float distanceAccelerating = acceleration * Mathf.Pow(timeAccelerating, 2) / 2;
+            float distanceAtApex = timeAtApex * MaxSpeed;
+
+            float distance = distanceAccelerating + distanceAtApex;
+
+            float decceleration = 2 * distance / Mathf.Pow(JumpTime, 2);
+            return decceleration * JumpTime;
+        }
+
+        public float GetWallJumpHorizontalDecceleration()
+        {
+            float velocity = GetWallJumpHorizontalVelocity();
+            float turningForce = MaxSpeed / TurningTime * AerialModifier;
+            float wallJumpDecceleration = (velocity / JumpTime) - turningForce;
+            return wallJumpDecceleration * Time.deltaTime;
+        }
+
         // Jump Helpers
         public float Gravity => 2 * MaxJumpHeight / Mathf.Pow(JumpTime, 2);
         public virtual float JumpVelocity => Gravity * JumpTime;

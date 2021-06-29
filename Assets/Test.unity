@@ -903,7 +903,7 @@ MonoBehaviour:
   maxSpeed: 10
   accelerationTime: 0.2
   brakingTime: 0.1
-  turningTime: 0.1
+  turningTime: 0.2
   airControlAmount: 0.8
   wallStickTime: 0.1
   maxJumpHeight: 3.6

@@ -38,10 +38,10 @@
                 return true;
             }
 
-            var jumpInput = owner.Inputs.JumpInput && owner.Inputs.JumpInputBuffer <= owner.Player.EarlyJumpBuffer;
-            if (jumpInput && owner.Inputs.CanWallJump)
+            var bufferedJumpInput = owner.Inputs.JumpInput && owner.Inputs.JumpInputBuffer <= owner.Player.EarlyJumpBuffer;
+            if (bufferedJumpInput && owner.Inputs.CanWallJump)
             {
-                stateMachine.TransitionTo(Accelerating);
+                stateMachine.TransitionTo(WallJumping);
                 return true;
             }
 

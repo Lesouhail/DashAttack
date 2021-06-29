@@ -21,7 +21,7 @@
                 return true;
             }
 
-            if (owner.Player.IsOnWallAirborne && !owner.IsWallJumping)
+            if (owner.Player.IsOnWallAirborne && !owner.InWallJumpFrame)
             {
                 stateMachine.TransitionTo(WallSticked);
                 return true;
