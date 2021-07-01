@@ -6,13 +6,12 @@
 
     using static HorizontalState;
     using static Utility.StateCallBack;
-    using System;
 
     [RequireComponent(typeof(PhysicsObject))]
     public class HorizontalMovement : Ability<HorizontalMovement, HorizontalState>
     {
         public float CurrentVelocity { get; private set; }
-        public bool InWallJumpFrame { get; private set; }
+        public bool IsWallJumping { get; private set; }
 
         public Player Player { get; private set; }
         public PlayerInputs Inputs { get; set; }
@@ -27,7 +26,7 @@
 
         private void LateUpdate()
         {
-            InWallJumpFrame = false;
+            IsWallJumping = false;
         }
 
         protected override void InitStateMachine()
@@ -39,12 +38,19 @@
                 new BrakingState(this, StateMachine),
                 new TurningState(this, StateMachine),
                 new MaxSpeedState(this, StateMachine),
-                new WallStickedState(this, StateMachine),
-                new WallJumpingState(this, StateMachine));
+                new WallStickedState(this, StateMachine));
 
             // --- REST STATE ---
             Subscribe(Rest, OnStateEnter, () => CurrentVelocity = 0);
 
+            // --- ACCELERATION STATE ---
+            Subscribe(Accelerating, OnStateEnter, () =>
+            {
+                if (PreviousState == WallSticked)
+                {
+                    WallJump();
+                }
+            });
             Subscribe(Accelerating, OnUpdate, () => Accelerate());
 
             // --- TURNING STATE ---
@@ -53,21 +59,18 @@
             // --- BRAKING STATE ---
             Subscribe(Braking, OnUpdate, () => Brake());
 
-            // --- AT APEX STATE ---
+            // --- AT APEX STATE
             Subscribe(AtApex, OnUpdate, () => Accelerate());
-
-            // --- WALL JUMPING STATE ---
-            Subscribe(WallJumping, OnStateEnter, () => InitiateWallJump());
-            Subscribe(WallJumping, OnUpdate, () => DeccelerateWallJump());
-        }
-
-        private void DeccelerateWallJump()
-        {
-            InWallJumpFrame = false;
-            CurrentVelocity -= Player.GetWallJumpHorizontalDecceleration();
         }
 
         protected override void OnLock() => CurrentVelocity = 0;
+
+        private void WallJump()
+        {
+            var direction = PhysicsObject.Collisions.Left ? 1 : -1;
+            CurrentVelocity = direction * Player.TurningForce / Time.deltaTime * Player.AerialModifier * Player.JumpTime;
+            IsWallJumping = true;
+        }
 
         private void Brake()
         {
@@ -92,12 +95,6 @@
             CurrentVelocity = Mathf.Clamp(CurrentVelocity, -Player.MaxSpeed, Player.MaxSpeed);
             PhysicsObject.AddMovement(new Vector2(CurrentVelocity * Time.deltaTime, 0));
         }
-
-        private void InitiateWallJump()
-        {
-            CurrentVelocity = Player.GetWallJumpHorizontalVelocity();
-            InWallJumpFrame = true;
-        }
     }
 
     public enum HorizontalState
@@ -107,7 +104,6 @@
         Braking,
         AtApex,
         Turning,
-        WallSticked,
-        WallJumping
+        WallSticked
     }
 }

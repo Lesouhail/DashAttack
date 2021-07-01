@@ -39,11 +39,10 @@
                 return true;
             }
 
-            if (owner.Inputs.JumpInput &&
-                owner.Inputs.JumpInputBuffer <= owner.Player.EarlyJumpBuffer &&
-                !owner.PhysicsObject.Collisions.Below)
+            var jumpInput = owner.Inputs.JumpInput && owner.Inputs.JumpInputBuffer <= owner.Player.EarlyJumpBuffer;
+            if (jumpInput && owner.Inputs.CanWallJump)
             {
-                stateMachine.TransitionTo(WallJumping);
+                stateMachine.TransitionTo(Accelerating);
                 return true;
             }
 
