@@ -42,19 +42,8 @@
 
         private void InitializeInputs()
         {
-            Inputs.Player.Jump.performed += _ =>
-            {
-                PlayerInputs.JumpInput = true;
-                if (VerticalMovement.CurrentState == VerticalState.Grounded)
-                {
-                    PlayerInputs.CanWallJump = false;
-                }
-            };
-            Inputs.Player.CancelJump.performed += _ =>
-            {
-                PlayerInputs.JumpInput = false;
-                PlayerInputs.CanWallJump = true;
-            };
+            Inputs.Player.Jump.performed += _ => PlayerInputs.JumpInput = true;
+            Inputs.Player.CancelJump.performed += _ => PlayerInputs.JumpInput = false;
 
             HorizontalMovement.Subscribe(HorizontalState.WallSticked, OnStateEnter, () => PlayerInputs.WallStickBuffer = 0);
             HorizontalMovement.Subscribe(HorizontalState.WallSticked, OnUpdate, () =>
