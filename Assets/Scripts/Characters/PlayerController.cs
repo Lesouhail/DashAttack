@@ -55,10 +55,15 @@
                 PlayerInputs.WallStickBuffer = isLeavingWall ? PlayerInputs.WallStickBuffer + Time.deltaTime : 0;
             });
 
+            VerticalMovement.Subscribe(VerticalState.Grounded, OnStateEnter, () => PlayerInputs.CanWallJump = false);
             VerticalMovement.Subscribe(VerticalState.Falling, OnUpdate, () => PlayerInputs.FallBuffer += Time.deltaTime);
             VerticalMovement.Subscribe(VerticalState.Falling, OnStateExit, () => PlayerInputs.FallBuffer = 0);
 
-            Inputs.Player.CancelJump.performed += (ctx) => PlayerInputs.JumpInputBuffer = 0;
+            Inputs.Player.CancelJump.performed += (ctx) =>
+            {
+                PlayerInputs.CanWallJump = true;
+                PlayerInputs.JumpInputBuffer = 0;
+            };
         }
 
         protected override void Update()

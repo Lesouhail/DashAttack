@@ -61,12 +61,32 @@
 
         // Run Helpers
         public float Acceleration => maxSpeed / accelerationTime * AerialModifier * Time.deltaTime;
-        public float Decceleration => maxSpeed / brakingTime * AerialModifier * Time.deltaTime;
+        public float Deceleration => maxSpeed / brakingTime * AerialModifier * Time.deltaTime;
         public float TurningForce => maxSpeed / turningTime * AerialModifier * Time.deltaTime;
         public float AerialModifier => PhysicsComponent.Collisions.Below ? 1 : airControlAmount;
+        public float WallJumpHorizontalVelocity => WallJumpHoritonalDeceleration / Time.deltaTime * JumpTime;
         public bool IsOnWallAirborne
             => (PhysicsComponent.Collisions.Left || PhysicsComponent.Collisions.Right)
             && !PhysicsComponent.Collisions.Below;
+
+        public float WallJumpHoritonalDeceleration
+        {
+            get
+            {
+                float timeAccelerating = JumpTime >= AccelerationTime
+                    ? AccelerationTime
+                    : JumpTime - AccelerationTime;
+
+                float timeAtApex = JumpTime - timeAccelerating;
+                timeAtApex = timeAtApex > 0 ? timeAtApex : 0;
+
+                float distanceAccelerating = Acceleration / Time.deltaTime * Mathf.Pow(timeAccelerating, 2) / 2;
+                float distanceAtApex = MaxSpeed * timeAtApex;
+                float wallJumpDistance = distanceAccelerating + distanceAtApex;
+
+                return 2 * wallJumpDistance / Mathf.Pow(JumpTime, 2) * Time.deltaTime;
+            }
+        }
 
         // Jump Helpers
         public float Gravity => 2 * MaxJumpHeight / Mathf.Pow(JumpTime, 2);

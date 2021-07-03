@@ -32,7 +32,6 @@
                 return true;
             }
 
-            UnityEngine.Debug.Log(owner.Inputs.WallStickBuffer);
             if (owner.Inputs.WallStickBuffer >= owner.Player.WallStickTime)
             {
                 stateMachine.TransitionTo(Rest);

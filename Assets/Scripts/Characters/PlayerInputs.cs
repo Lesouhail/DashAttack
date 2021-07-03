@@ -18,6 +18,8 @@ namespace DashAttack.Characters
         public float FallBuffer { get; set; }
 
         public float WallStickBuffer { get; set; }
+
+        public bool CanWallJump { get; set; }
     }
 
     public struct DashInput

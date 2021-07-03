@@ -6,12 +6,14 @@
 
     using static HorizontalState;
     using static Utility.StateCallBack;
+    using System.Collections;
 
     [RequireComponent(typeof(PhysicsObject))]
     public class HorizontalMovement : Ability<HorizontalMovement, HorizontalState>
     {
         public float CurrentVelocity { get; private set; }
-        public bool IsWallJumping { get; private set; }
+        public bool IsWallJumpFrame { get; private set; }
+        private bool IsWallJumping { get; set; }
 
         public Player Player { get; private set; }
         public PlayerInputs Inputs { get; set; }
@@ -26,7 +28,7 @@
 
         private void LateUpdate()
         {
-            IsWallJumping = false;
+            IsWallJumpFrame = false;
         }
 
         protected override void InitStateMachine()
@@ -55,6 +57,7 @@
 
             // --- TURNING STATE ---
             Subscribe(Turning, OnUpdate, () => Turn());
+            Subscribe(Turning, OnStateExit, () => IsWallJumping = false);
 
             // --- BRAKING STATE ---
             Subscribe(Braking, OnUpdate, () => Brake());
@@ -67,17 +70,22 @@
 
         private void WallJump()
         {
-            var direction = PhysicsObject.Collisions.Left ? 1 : -1;
-            CurrentVelocity = direction * Player.TurningForce / Time.deltaTime * Player.AerialModifier * Player.JumpTime;
+            float direction = PhysicsObject.Collisions.Left ? 1 : -1;
+            CurrentVelocity = Player.WallJumpHorizontalVelocity * direction;
+
             IsWallJumping = true;
+            IsWallJumpFrame = true;
         }
 
         private void Brake()
         {
-            bool isStopping = Mathf.Abs(CurrentVelocity) - Player.Decceleration < 0;
+            bool isStopping = Mathf.Abs(CurrentVelocity) - Player.Deceleration < 0;
+            float deceleration = IsWallJumping
+                ? Player.WallJumpHoritonalDeceleration
+                : Player.Deceleration;
 
             CurrentVelocity = !isStopping
-                ? CurrentVelocity - Player.Decceleration * Mathf.Sign(CurrentVelocity)
+                ? CurrentVelocity - deceleration * Mathf.Sign(CurrentVelocity)
                 : 0;
 
             PhysicsObject.AddMovement(new Vector2(CurrentVelocity * Time.deltaTime, 0));
@@ -85,7 +93,11 @@
 
         private void Turn()
         {
-            CurrentVelocity -= Player.TurningForce * Mathf.Sign(CurrentVelocity);
+            float deceleration = IsWallJumping
+                ? Player.WallJumpHoritonalDeceleration
+                : Player.TurningForce;
+
+            CurrentVelocity -= deceleration * Mathf.Sign(CurrentVelocity);
             PhysicsObject.AddMovement(new Vector2(CurrentVelocity * Time.deltaTime, 0));
         }
 
