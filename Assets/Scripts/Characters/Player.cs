@@ -92,12 +92,16 @@
         public float Gravity => 2 * MaxJumpHeight / Mathf.Pow(JumpTime, 2);
         public virtual float JumpVelocity => Gravity * JumpTime;
 
-        public float GetVerticalDeltaPosition(float verticalVelocity) => (verticalVelocity * Time.deltaTime) + (Gravity * Mathf.Pow(Time.deltaTime, 2) / 2);
+        public float GetVerticalDeltaPosition(float verticalVelocity)
+            => (verticalVelocity * Time.deltaTime) + (Gravity * Mathf.Pow(Time.deltaTime, 2) / 2);
 
         // Dash Helpers
         public float TotalDashingTime => dashTime + recoveryTime;
-        public float DashVelocity => DashDecceleration * TotalDashingTime;
         public float DashDecceleration => 2 * DashDistance / Mathf.Pow(TotalDashingTime, 2);
+        public float DashVelocity => DashDecceleration * TotalDashingTime;
+
+        public float GetDashDeltaPosition(float dashVelocity)
+            => dashVelocity * Time.deltaTime + (DashDecceleration * Mathf.Pow(Time.deltaTime, 2) / 2);
 
         private void Start()
         {

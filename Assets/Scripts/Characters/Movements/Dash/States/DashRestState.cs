@@ -13,7 +13,8 @@
 
         protected override bool HasTransition()
         {
-            if (owner.Input && !owner.LastFrameInput && owner.CanDash)
+            bool input = owner.Inputs.DashInput && !owner.Inputs.LastFrameDashInput;
+            if (input && owner.Inputs.CanDash)
             {
                 stateMachine.TransitionTo(DashState.Casting);
                 return true;

@@ -20,10 +20,14 @@
                 return true;
             }
 
-            if (owner.Inputs.JumpInput && !owner.Inputs.LastFrameJumpInput &&
-                owner.Inputs.JumpInputBuffer <= owner.Player.LateJumpBuffer &&
-                (stateMachine.PreviousState == Grounded ||
-                 stateMachine.PreviousState == WallSliding))
+            bool input = owner.Inputs.JumpInput &&
+                        !owner.Inputs.LastFrameJumpInput &&
+                         owner.Inputs.FallBuffer <= owner.Player.LateJumpBuffer;
+
+            bool grounded = stateMachine.PreviousState == WallSliding ||
+                            stateMachine.PreviousState == Grounded;
+
+            if (input && grounded)
             {
                 stateMachine.TransitionTo(Rising);
                 return true;

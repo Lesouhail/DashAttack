@@ -14,7 +14,13 @@
 
         protected override bool HasTransition()
         {
-            stateMachine.TransitionTo(Grounded);
+            if (owner.PhysicsObject.Collisions.Below)
+            {
+                stateMachine.TransitionTo(Grounded);
+                return true;
+            }
+
+            stateMachine.TransitionTo(Falling);
             return true;
         }
     }

@@ -28,7 +28,7 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Jump"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""fae57ef8-859a-49f3-bc97-0be584a5bdf7"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -218,7 +218,7 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""579cba78-11af-45ff-9de8-32a012e523e4"",
                     ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": ""Press"",
+                    ""interactions"": ""Press(pressPoint=1)"",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Dash"",

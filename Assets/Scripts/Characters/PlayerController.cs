@@ -5,10 +5,8 @@
     using DashAttack.Characters.Movements.Vertical;
     using DashAttack.Extensions;
     using DashAttack.Physics;
-    using System;
     using UnityEngine;
 
-    using static DashAttack.Characters.Movements.Dash.DashState;
     using static Utility.StateCallBack;
 
     public class PlayerController : PhysicsObject
@@ -32,6 +30,7 @@
 
             HorizontalMovement.Inputs = PlayerInputs;
             VerticalMovement.Inputs = PlayerInputs;
+            Dash.Inputs = PlayerInputs;
         }
 
         protected override void Start()
@@ -45,6 +44,15 @@
             Inputs.Player.Jump.performed += _ => PlayerInputs.JumpInput = true;
             Inputs.Player.CancelJump.performed += _ => PlayerInputs.JumpInput = false;
 
+            Inputs.Player.Dash.performed += _ => PlayerInputs.DashInput = true;
+            Inputs.Player.Dash.canceled += _ => PlayerInputs.DashInput = false;
+
+            Inputs.Player.CancelJump.performed += (ctx) =>
+            {
+                PlayerInputs.CanWallJump = true;
+                PlayerInputs.JumpInputBuffer = 0;
+            };
+
             HorizontalMovement.Subscribe(HorizontalState.WallSticked, OnStateEnter, () => PlayerInputs.WallStickBuffer = 0);
             HorizontalMovement.Subscribe(HorizontalState.WallSticked, OnUpdate, () =>
             {
@@ -55,15 +63,27 @@
                 PlayerInputs.WallStickBuffer = isLeavingWall ? PlayerInputs.WallStickBuffer + Time.deltaTime : 0;
             });
 
-            VerticalMovement.Subscribe(VerticalState.Grounded, OnStateEnter, () => PlayerInputs.CanWallJump = false);
+            VerticalMovement.Subscribe(VerticalState.Grounded, OnStateEnter, () =>
+            {
+                PlayerInputs.CanWallJump = false;
+                PlayerInputs.CanDash = true;
+            });
             VerticalMovement.Subscribe(VerticalState.Falling, OnUpdate, () => PlayerInputs.FallBuffer += Time.deltaTime);
             VerticalMovement.Subscribe(VerticalState.Falling, OnStateExit, () => PlayerInputs.FallBuffer = 0);
 
-            Inputs.Player.CancelJump.performed += (ctx) =>
+            Dash.Subscribe(DashState.Rest, OnStateEnter, () =>
             {
-                PlayerInputs.CanWallJump = true;
-                PlayerInputs.JumpInputBuffer = 0;
-            };
+                HorizontalMovement.IsLocked = false;
+                VerticalMovement.IsLocked = false;
+            });
+            Dash.Subscribe(DashState.Rest, OnStateExit, () => PlayerInputs.CanDash = false);
+            Dash.Subscribe(DashState.Casting, OnStateEnter, () =>
+            {
+                HorizontalMovement.IsLocked = true;
+                VerticalMovement.IsLocked = true;
+            });
+            Dash.Subscribe(DashState.Casting, OnUpdate, () => PlayerInputs.DashDirection = Inputs.Player.DashDirection.ReadValue<Vector2>());
+            Dash.Subscribe(DashState.Recovering, OnStateEnter, () => HorizontalMovement.IsLocked = false);
         }
 
         protected override void Update()
@@ -75,9 +95,7 @@
                 ? PlayerInputs.JumpInputBuffer + Time.deltaTime
                 : 0;
 
-            PlayerInputs.DashInput = new DashInput(
-                Inputs.Player.Dash.ReadValue<bool>(),
-                Inputs.Player.DashDirection.ReadValue<Vector2>());
+            Debug.Log(PlayerInputs.CanDash);
         }
 
         protected virtual void OnEnable()
@@ -89,25 +107,26 @@
         {
             PlayerInputs.LastFrameRunInput = PlayerInputs.RunInput;
             PlayerInputs.LastFrameJumpInput = PlayerInputs.JumpInput;
+            PlayerInputs.LastFrameDashInput = PlayerInputs.DashInput;
         }
 
         protected override bool IgnoreCollisions(GameObject other)
         {
-            //if (Dash.CurrentState == Dashing && collidablesMask.ContainsLayer(other.layer))
-            //{
-            //    OnDashHit(other);
-            //    return true;
-            //}
+            if (Dash.CurrentState == DashState.Dashing && collidablesMask.ContainsLayer(other.layer))
+            {
+                OnDashHit(other);
+                return true;
+            }
             return false;
         }
 
         private void OnDashHit(GameObject other)
         {
-            if (other.TryGetComponent<ICollidable>(out var collidable))
-            {
-                collidable.Collide(gameObject);
-                Dash.Reset();
-            }
+            //if (other.TryGetComponent<ICollidable>(out var collidable))
+            //{
+            //    collidable.Collide(gameObject);
+            //    PlayerInputs.CanDash = true;
+            //}
         }
     }
 }

@@ -13,13 +13,13 @@
 
         protected override bool HasTransition()
         {
-            if (owner.DashCounter >= owner.DashTime)
+            if (owner.DashCounter >= owner.Player.DashTime)
             {
                 stateMachine.TransitionTo(Recovering);
                 return true;
             }
 
-            if (owner.PhysicsComponent.Collisions.Left || owner.PhysicsComponent.Collisions.Right)
+            if (owner.PhysicsObject.Collisions.Left || owner.PhysicsObject.Collisions.Right)
             {
                 stateMachine.TransitionTo(Rest);
                 return true;
