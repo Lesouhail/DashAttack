@@ -122,11 +122,11 @@
 
         private void OnDashHit(GameObject other)
         {
-            //if (other.TryGetComponent<ICollidable>(out var collidable))
-            //{
-            //    collidable.Collide(gameObject);
-            //    PlayerInputs.CanDash = true;
-            //}
+            if (other.TryGetComponent<ICollidable>(out var collidable))
+            {
+                collidable.Collide(gameObject);
+                PlayerInputs.CanDash = true;
+            }
         }
     }
 }
