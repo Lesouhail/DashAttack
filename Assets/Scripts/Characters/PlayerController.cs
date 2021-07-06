@@ -94,8 +94,6 @@
             PlayerInputs.JumpInputBuffer = PlayerInputs.JumpInput
                 ? PlayerInputs.JumpInputBuffer + Time.deltaTime
                 : 0;
-
-            Debug.Log(PlayerInputs.CanDash);
         }
 
         protected virtual void OnEnable()

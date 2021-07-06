@@ -14,13 +14,14 @@ namespace DashAttack.Physics
 
         public Collision Collisions => checker.Collisions;
         public Collision LastFrameCollisions { get; private set; }
+        public Vector2 Velocity { get; private set; }
 
         private Vector2 deltaPosition;
         // Make sure velocity does not exceeds maximum values
-        public Vector2 DeltaPosition
+        private Vector2 DeltaPosition
         {
             get => deltaPosition;
-            private set
+            set
             {
                 deltaPosition.x = Mathf.Clamp(value.x, -maxHorizontalVelocity, maxHorizontalVelocity);
                 deltaPosition.y = Mathf.Clamp(value.y, -maxVerticalVelocity, maxVerticalVelocity);
@@ -50,6 +51,7 @@ namespace DashAttack.Physics
         {
             transform.Translate(deltaPosition);
             //rb.MovePosition(rb.position + deltaPosition);
+            Velocity = DeltaPosition;
             DeltaPosition = Vector2.zero;
         }
 
