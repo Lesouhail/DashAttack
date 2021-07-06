@@ -17,6 +17,8 @@
         [SerializeField] private float maxJumpHeight;
         [SerializeField] private float minJumpHeight;
         [SerializeField] private float jumpTime;
+        [SerializeField] private float hangTime;
+        [SerializeField] private float hangingFallMultiplier;
         [SerializeField] private float maxFallVelocity;
         [SerializeField] private float fallMultiplier;
         [SerializeField] private float wallSlideMultiplier;
@@ -51,7 +53,9 @@
         public float MaxJumpHeight => maxJumpHeight;
         public float MinJumpHeight => minJumpHeight;
         public float JumpTime => jumpTime;
+        public float HangTime => hangTime;
         public float MaxFallVelocity => maxFallVelocity;
+        public float HangingFallMultiplier => hangingFallMultiplier;
         public float FallMultiplier => fallMultiplier;
         public float WallSlideMultiplier => wallSlideMultiplier;
 

@@ -35,6 +35,9 @@
                 new DashingState(this, StateMachine),
                 new DashRecoveryState(this, StateMachine));
 
+            // --- Rest ---
+            Subscribe(Rest, OnStateEnter, () => CurrentVelocity = 0);
+
             // --- Casting ---
             Subscribe(Casting, OnStateEnter, () => DashCastingCounter = 0);
             Subscribe(Casting, OnUpdate, () => DashCastingCounter += Time.deltaTime);

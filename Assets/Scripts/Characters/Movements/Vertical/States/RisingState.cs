@@ -23,7 +23,7 @@
 
             if (!owner.Inputs.JumpInput)
             {
-                stateMachine.TransitionTo(Falling);
+                stateMachine.TransitionTo(Hanging);
                 return true;
             }
             else
@@ -32,7 +32,7 @@
                 if (nextVelocity < 0 ||
                     owner.Player.GetVerticalDeltaPosition(nextVelocity) < 0.000_01f)
                 {
-                    stateMachine.TransitionTo(Falling);
+                    stateMachine.TransitionTo(Hanging);
                     return true;
                 }
             }

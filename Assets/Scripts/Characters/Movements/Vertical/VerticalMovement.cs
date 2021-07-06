@@ -15,19 +15,14 @@
         public PhysicsObject PhysicsObject { get; private set; }
         public PlayerInputs Inputs { get; set; }
 
+        public float HangTimeCounter { get; private set; }
         public float CurrentVerticalVelocity { get; private set; }
-        private Vector2 CurrentWallJumpVelocity { get; set; }
 
         protected override void Awake()
         {
             base.Awake();
             Player = GetComponent<Player>();
             PhysicsObject = GetComponent<PhysicsObject>();
-        }
-
-        protected override void Update()
-        {
-            base.Update();
         }
 
         protected override void InitStateMachine()
@@ -38,37 +33,45 @@
                 new GroundedState(this, StateMachine),
                 new RisingState(this, StateMachine),
                 new FallingState(this, StateMachine),
-                new WallSlidingState(this, StateMachine));
+                new WallSlidingState(this, StateMachine),
+                new HangingState(this, StateMachine));
 
             // --- GROUNDED STATE ---
             Subscribe(Grounded, OnUpdate, () =>
             {
                 CurrentVerticalVelocity = 0;
-                Fall(true);
+                Fall(Player.FallMultiplier);
             });
 
             // --- FALING STATE ---
-            Subscribe(Falling, OnUpdate, () => Fall(true));
+            Subscribe(Falling, OnUpdate, () => Fall(Player.FallMultiplier));
 
             // --- RISING ---
             Subscribe(Rising, OnStateEnter, () => CurrentVerticalVelocity = Player.JumpVelocity);
-            Subscribe(Rising, OnUpdate, () => Fall(false));
+            Subscribe(Rising, OnUpdate, () => Fall(1));
             Subscribe(Rising, OnStateExit, () => CurrentVerticalVelocity = 0);
 
             // --- WALL SLIDING STATE ---
-            StateMachine.Subscribe(WallSliding, OnUpdate, () => WallSlide());
+            Subscribe(WallSliding, OnUpdate, () => WallSlide());
             Subscribe(WallSliding, OnStateExit, () => CurrentVerticalVelocity = 0);
+
+            // --- HANGING STATE ---
+            Subscribe(Hanging, OnStateEnter, () => CurrentVerticalVelocity = 0);
+            Subscribe(Hanging, OnUpdate, () =>
+            {
+                HangTimeCounter += Time.deltaTime;
+                Fall(Player.HangingFallMultiplier);
+            });
+            Subscribe(Hanging, OnStateExit, () => HangTimeCounter = 0);
         }
 
         protected override void OnLock()
         {
             CurrentVerticalVelocity = 0;
-            CurrentWallJumpVelocity = Vector2.zero;
         }
 
-        private void Fall(bool applyFallMultiplier)
+        private void Fall(float fallMultiplier)
         {
-            var fallMultiplier = applyFallMultiplier ? Player.FallMultiplier : 1;
             CurrentVerticalVelocity -= Player.Gravity * Time.deltaTime * fallMultiplier;
 
             if (CurrentVerticalVelocity < -Player.MaxFallVelocity)
@@ -97,5 +100,6 @@
         Grounded,
         Rising,
         WallSliding,
+        Hanging
     }
 }

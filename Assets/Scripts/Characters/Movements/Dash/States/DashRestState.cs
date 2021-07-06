@@ -1,6 +1,7 @@
 ﻿namespace DashAttack.Characters.Movements.Dash.States
 {
     using DashAttack.Utility;
+    using static DashState;
 
     public class DashRestState : State<DashMovement, DashState>
     {
@@ -9,14 +10,14 @@
         {
         }
 
-        public override DashState Type => DashState.Rest;
+        public override DashState Type => Rest;
 
         protected override bool HasTransition()
         {
             bool input = owner.Inputs.DashInput && !owner.Inputs.LastFrameDashInput;
             if (input && owner.Inputs.CanDash)
             {
-                stateMachine.TransitionTo(DashState.Casting);
+                stateMachine.TransitionTo(Casting);
                 return true;
             }
 

@@ -1,6 +1,7 @@
 ﻿namespace DashAttack.Characters.Movements.Dash.States
 {
     using DashAttack.Utility;
+    using UnityEngine;
     using static DashState;
 
     public class DashingState : State<DashMovement, DashState>
@@ -19,7 +20,14 @@
                 return true;
             }
 
-            if (owner.PhysicsObject.Collisions.Left || owner.PhysicsObject.Collisions.Right)
+            if (owner.PhysicsObject.Collisions.Above && owner.Inputs.DashDirection == Vector2.up)
+            {
+                stateMachine.TransitionTo(Rest);
+                return true;
+            }
+
+            if ((owner.PhysicsObject.Collisions.Left || owner.PhysicsObject.Collisions.Right) &&
+                (owner.Inputs.DashDirection == Vector2.left || owner.Inputs.DashDirection == Vector2.right))
             {
                 stateMachine.TransitionTo(Rest);
                 return true;
