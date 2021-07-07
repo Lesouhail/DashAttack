@@ -78,18 +78,21 @@
             {
                 CurrentVerticalVelocity = -Player.MaxFallVelocity;
             }
-            PhysicsObject.AddMovement(new Vector2(0, Player.GetVerticalDeltaPosition(CurrentVerticalVelocity)));
+
+            PhysicsObject.AddMovement(new Vector2(0, CurrentVerticalVelocity * Time.deltaTime));
         }
 
         private void WallSlide()
         {
             CurrentVerticalVelocity -= Player.Gravity * Player.WallSlideMultiplier * Time.deltaTime;
             var wallSlideMaxVelocity = -Player.MaxFallVelocity * Player.WallSlideMultiplier;
+
             if (CurrentVerticalVelocity < wallSlideMaxVelocity)
             {
                 CurrentVerticalVelocity = wallSlideMaxVelocity;
             }
-            PhysicsObject.AddMovement(new Vector2(0, Player.GetVerticalDeltaPosition(CurrentVerticalVelocity)));
+
+            PhysicsObject.AddMovement(new Vector2(0, CurrentVerticalVelocity));
         }
     }
 
