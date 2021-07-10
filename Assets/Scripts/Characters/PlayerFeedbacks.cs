@@ -5,22 +5,29 @@
 
     public class PlayerFeedbacks : MonoBehaviour
     {
+        [SerializeField] private SpriteRenderer dashRenderer;
         [SerializeField] private Color noDashColor;
 
-        private DashMovement Dash { get; set; }
-        private SpriteRenderer Renderer { get; set; }
+        public PlayerInputs Inputs { get; set; }
         private Color BaseColor { get; set; }
 
         private void Start()
         {
-            Dash = GetComponent<DashMovement>();
-            Renderer = GetComponent<SpriteRenderer>();
-            BaseColor = Renderer.color;
+            BaseColor = dashRenderer.color;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
-            //Renderer.color = Dash.CanDash ? BaseColor : noDashColor;
+            dashRenderer.color = Inputs.CanDash ? BaseColor : noDashColor;
+            float direction = Mathf.Sign(Inputs.RunInput);
+
+            if (Inputs.RunInput != 0)
+            {
+                transform.localScale = new Vector3(
+                    Mathf.Abs(transform.localScale.x) * direction,
+                    transform.localScale.y,
+                    transform.localScale.z);
+            }
         }
     }
 }

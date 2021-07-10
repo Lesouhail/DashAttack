@@ -16,6 +16,7 @@
         private HorizontalMovement HorizontalMovement { get; set; }
         private VerticalMovement VerticalMovement { get; set; }
         private DashMovement Dash { get; set; }
+        private PlayerFeedbacks Feedbacks { get; set; }
         private DashAttackUltimateInputs Inputs { get; set; }
         private PlayerInputs PlayerInputs { get; set; }
 
@@ -28,9 +29,13 @@
             VerticalMovement = GetComponent<VerticalMovement>();
             Dash = GetComponent<DashMovement>();
 
+            Feedbacks = GetComponent<PlayerFeedbacks>();
+
             HorizontalMovement.Inputs = PlayerInputs;
             VerticalMovement.Inputs = PlayerInputs;
             Dash.Inputs = PlayerInputs;
+
+            Feedbacks.Inputs = PlayerInputs;
         }
 
         protected override void Start()
