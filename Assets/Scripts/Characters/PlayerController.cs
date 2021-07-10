@@ -83,7 +83,13 @@
                 VerticalMovement.IsLocked = true;
             });
             Dash.Subscribe(DashState.Casting, OnUpdate, () => PlayerInputs.DashDirection = Inputs.Player.DashDirection.ReadValue<Vector2>());
-            Dash.Subscribe(DashState.Recovering, OnStateEnter, () => HorizontalMovement.IsLocked = false);
+            Dash.Subscribe(DashState.Recovering, OnStateEnter, () =>
+            {
+                VerticalMovement.IsLocked = false;
+                HorizontalMovement.IsLocked = false;
+                PlayerInputs.IsInDashRecovery = true;
+            });
+            Dash.Subscribe(DashState.Recovering, OnStateExit, () => PlayerInputs.IsInDashRecovery = false);
         }
 
         protected override void Update()

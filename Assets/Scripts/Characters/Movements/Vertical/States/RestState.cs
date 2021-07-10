@@ -20,6 +20,11 @@
                 return true;
             }
 
+            if (owner.Inputs.IsInDashRecovery)
+            {
+                stateMachine.TransitionTo(Hanging);
+            }
+
             stateMachine.TransitionTo(Falling);
             return true;
         }

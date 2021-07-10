@@ -14,7 +14,7 @@
 
         protected override bool HasTransition()
         {
-            if (owner.HangTimeCounter >= owner.Player.HangTime)
+            if (owner.HangTimeCounter >= owner.Player.HangTime && !owner.Inputs.IsInDashRecovery)
             {
                 stateMachine.TransitionTo(Falling);
                 return true;

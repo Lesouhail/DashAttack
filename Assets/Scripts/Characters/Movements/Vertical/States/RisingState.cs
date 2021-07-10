@@ -29,8 +29,7 @@
             else
             {
                 var nextVelocity = owner.CurrentVerticalVelocity - (owner.Player.Gravity * Time.deltaTime);
-                if (nextVelocity < 0 ||
-                    owner.Player.GetVerticalDeltaPosition(nextVelocity) < 0.000_01f)
+                if (nextVelocity < 0.000_01f)
                 {
                     stateMachine.TransitionTo(Hanging);
                     return true;

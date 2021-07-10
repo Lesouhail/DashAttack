@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace DashAttack.Characters
+﻿namespace DashAttack.Characters
 {
+    using UnityEngine;
+
     public class PlayerInputs
     {
         public float RunInput { get; set; }
@@ -16,24 +14,11 @@ namespace DashAttack.Characters
         public bool LastFrameDashInput { get; set; }
 
         public float JumpInputBuffer { get; set; }
-
         public float FallBuffer { get; set; }
-
         public float WallStickBuffer { get; set; }
 
         public bool CanWallJump { get; set; }
         public bool CanDash { get; set; }
+        public bool IsInDashRecovery { get; set; }
     }
-
-    //public struct DashInput
-    //{
-    //    public DashInput(bool button, Vector2 direction)
-    //    {
-    //        Button = button;
-    //        Direction = direction;
-    //    }
-
-    //    public bool Button { get; set; }
-    //    public Vector2 Direction { get; set; }
-    //}
 }

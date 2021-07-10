@@ -36,6 +36,9 @@
                 new WallSlidingState(this, StateMachine),
                 new HangingState(this, StateMachine));
 
+            // --- REST STATE ---
+            Subscribe(Rest, OnStateEnter, () => CurrentVerticalVelocity = 0);
+
             // --- GROUNDED STATE ---
             Subscribe(Grounded, OnUpdate, () =>
             {
@@ -53,10 +56,8 @@
 
             // --- WALL SLIDING STATE ---
             Subscribe(WallSliding, OnUpdate, () => WallSlide());
-            Subscribe(WallSliding, OnStateExit, () => CurrentVerticalVelocity = 0);
 
             // --- HANGING STATE ---
-            Subscribe(Hanging, OnStateEnter, () => CurrentVerticalVelocity = 0);
             Subscribe(Hanging, OnUpdate, () =>
             {
                 HangTimeCounter += Time.deltaTime;
@@ -68,6 +69,14 @@
         protected override void OnLock()
         {
             CurrentVerticalVelocity = 0;
+        }
+
+        protected override void OnUnlock()
+        {
+            if (!PhysicsObject.Collisions.Below)
+            {
+                StateMachine.TransitionTo(Hanging);
+            }
         }
 
         private void Fall(float fallMultiplier)
@@ -92,7 +101,7 @@
                 CurrentVerticalVelocity = wallSlideMaxVelocity;
             }
 
-            PhysicsObject.AddMovement(new Vector2(0, CurrentVerticalVelocity));
+            PhysicsObject.AddMovement(new Vector2(0, CurrentVerticalVelocity * Time.deltaTime));
         }
     }
 
