@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1008533027699700211}
-  - component: {fileID: 1008533027699700208}
-  - component: {fileID: 1008533027699700223}
   - component: {fileID: 1008533027699700220}
   - component: {fileID: 1008533027699700221}
   - component: {fileID: 1008533027699700210}
@@ -18,6 +16,8 @@ GameObject:
   - component: {fileID: 1008533027699700217}
   - component: {fileID: 1008533027699700216}
   - component: {fileID: 1008533027699700219}
+  - component: {fileID: 2312779797151459206}
+  - component: {fileID: 5345613530163341743}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -39,53 +39,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1008533027699700208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1008533027699700209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f08a2ff4a653c84f95b1680044c589f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSpeed: 10
-  accelerationTime: 0.2
-  brakingTime: 0.1
-  turningTime: 0.1
-  airControlAmount: 0.8
-  wallStickTime: 0.1
-  maxJumpHeight: 3.6
-  minJumpHeight: 1
-  jumpTime: 0.35
-  maxFallVelocity: 20
-  fallMultiplier: 1.2
-  wallSlideMultiplier: 1
-  dashDistance: 5
-  castTime: 0.1
-  dashTime: 0.3
-  recoveryTime: 0.1
-  earlyJumpBuffer: 0.1
-  lateJumpBuffer: 0.1
---- !u!114 &1008533027699700223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1008533027699700209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c80f63d0abba7e343b30f33d35d41914, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHorizontalVelocity: 10
-  maxVerticalVelocity: 10
-  collidablesMask:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!50 &1008533027699700220
 Rigidbody2D:
   serializedVersion: 4
@@ -239,3 +192,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6755f038b2b65742b7e93a461bed191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2312779797151459206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008533027699700209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b1fbaf37570c6c40b5fbb35e1de0e8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHorizontalVelocity: 10
+  maxVerticalVelocity: 10
+  collidablesMask:
+    serializedVersion: 2
+    m_Bits: 128
+--- !u!114 &5345613530163341743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008533027699700209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df985d9f7a073a8438772dfbb6c2b538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 8
+  accelerationTime: 0.1
+  brakingTime: 0.07
+  turningTime: 0.05
+  airControlAmount: 0.85
+  wallStickTime: 0.1
+  maxJumpHeight: 3.6
+  minJumpHeight: 1
+  jumpTime: 0.35
+  hangTime: 0.6
+  hangingFallMultiplier: 0.25
+  maxFallVelocity: 30
+  fallMultiplier: 1.14
+  wallSlideMultiplier: 0.25
+  dashDistance: 7
+  castTime: 0.08
+  dashTime: 0.32
+  recoveryTime: 0.1
+  earlyJumpBuffer: 0.1
+  lateJumpBuffer: 0.1

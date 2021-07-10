@@ -17,6 +17,6 @@ MonoBehaviour:
   m_UniversalNamespace: 
   m_IndentUsingSpaces: 0
   m_NumberOfSpaces: 4
-  m_UpdateNamespacesWhenMovingScripts: 1
+  m_UpdateNamespacesWhenMovingScripts: 0
   m_DirectoryIgnoreList: 
   m_EnableDebugLogging: 0

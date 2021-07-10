@@ -11,11 +11,10 @@ GameObject:
   - component: {fileID: 411499508074586269}
   - component: {fileID: 411499508074586270}
   - component: {fileID: 411499508074586271}
-  - component: {fileID: 411499508074586268}
   - component: {fileID: 411499508074586267}
-  - component: {fileID: 8176094373653992748}
   - component: {fileID: 411499508074586266}
   - component: {fileID: 411499508074586264}
+  - component: {fileID: 1500954872182954552}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -88,26 +87,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411499508074586240}
   m_Enabled: 1
---- !u!114 &411499508074586268
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 411499508074586240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AssetsPPU: 16
-  m_RefResolutionX: 426
-  m_RefResolutionY: 240
-  m_UpscaleRT: 0
-  m_PixelSnapping: 0
-  m_CropFrameX: 0
-  m_CropFrameY: 0
-  m_StretchFill: 0
 --- !u!114 &411499508074586267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,27 +101,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHorizontalVelocity: 100
   maxVerticalVelocity: 100
-  target: {fileID: 0}
+  player: {fileID: 0}
   horizontalSmoothTime: 0.1
   verticalSmoothTime: 0.1
   playerFrameScale: {x: 1, y: 2.5}
   drawDebugFrame: 1
---- !u!114 &8176094373653992748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 411499508074586240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e631581f04409a48a2d36d0c721d725, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  debugRays: 1
 --- !u!61 &411499508074586266
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -190,3 +153,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &1500954872182954552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411499508074586240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d592dd7342a231d478379da1745b3869, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  debugRays: 0
