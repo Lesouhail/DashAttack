@@ -2,6 +2,7 @@
 {
     using DashAttack.Utility;
     using UnityEngine;
+    using static HorizontalState;
 
     public class TurningState : State<HorizontalMovement, HorizontalState>
     {
@@ -10,18 +11,24 @@
         {
         }
 
-        public override HorizontalState Type => HorizontalState.Turning;
+        public override HorizontalState Type => Turning;
 
         protected override bool HasTransition()
         {
-            if (owner.Input == 0)
+            if (owner.Player.IsOnWallAirborne && !owner.IsWallJumpFrame)
             {
-                stateMachine.TransitionTo(HorizontalState.Braking);
+                stateMachine.TransitionTo(WallSticked);
                 return true;
             }
-            else if (Mathf.Sign(owner.Input) == Mathf.Sign(owner.CurrentVelocity))
+
+            if (owner.Inputs.RunInput == 0)
             {
-                stateMachine.TransitionTo(HorizontalState.Accelerating);
+                stateMachine.TransitionTo(Braking);
+                return true;
+            }
+            else if (Mathf.Sign(owner.Inputs.RunInput) == Mathf.Sign(owner.CurrentVelocity))
+            {
+                stateMachine.TransitionTo(Accelerating);
                 return true;
             }
             return false;

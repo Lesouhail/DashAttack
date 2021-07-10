@@ -3,6 +3,8 @@
     using DashAttack.Utility;
     using UnityEngine;
 
+    using static HorizontalState;
+
     public class AcceleratingState : State<HorizontalMovement, HorizontalState>
     {
         public AcceleratingState(HorizontalMovement owner, StateMachine<HorizontalMovement, HorizontalState> stateMachine)
@@ -10,25 +12,32 @@
         {
         }
 
-        public override HorizontalState Type => HorizontalState.Accelerating;
+        public override HorizontalState Type => Accelerating;
 
         protected override bool HasTransition()
         {
-            if (owner.Input == 0)
+            bool isWallStickTimeOver = owner.Inputs.WallStickBuffer >= owner.Player.WallStickTime;
+            if (owner.Player.IsOnWallAirborne && !owner.IsWallJumpFrame && !isWallStickTimeOver)
             {
-                stateMachine.TransitionTo(HorizontalState.Braking);
-                return true;
-            }
-            else if (Mathf.Sign(owner.Input) != Mathf.Sign(owner.CurrentVelocity) &&
-                     owner.CurrentVelocity != 0)
-            {
-                stateMachine.TransitionTo(HorizontalState.Turning);
+                stateMachine.TransitionTo(WallSticked);
                 return true;
             }
 
-            if (Mathf.Abs(owner.CurrentVelocity) == owner.MaxSpeed)
+            if (owner.Inputs.RunInput == 0)
             {
-                stateMachine.TransitionTo(HorizontalState.AtApex);
+                stateMachine.TransitionTo(Braking);
+                return true;
+            }
+            else if (Mathf.Sign(owner.Inputs.RunInput) != Mathf.Sign(owner.CurrentVelocity) &&
+                     owner.CurrentVelocity != 0)
+            {
+                stateMachine.TransitionTo(Turning);
+                return true;
+            }
+
+            if (Mathf.Abs(owner.CurrentVelocity) == owner.Player.MaxSpeed)
+            {
+                stateMachine.TransitionTo(AtApex);
                 return true;
             }
 

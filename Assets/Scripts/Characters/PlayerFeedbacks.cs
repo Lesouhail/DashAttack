@@ -20,7 +20,7 @@
 
         private void Update()
         {
-            Renderer.color = Dash.CanDash ? BaseColor : noDashColor;
+            //Renderer.color = Dash.CanDash ? BaseColor : noDashColor;
         }
     }
 }

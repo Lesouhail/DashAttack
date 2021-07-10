@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 411499508074586271}
   - component: {fileID: 411499508074586268}
   - component: {fileID: 411499508074586267}
+  - component: {fileID: 8176094373653992748}
   - component: {fileID: 411499508074586266}
   - component: {fileID: 411499508074586264}
-  - component: {fileID: 411499508074586265}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -95,16 +95,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411499508074586240}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AssetsPPU: 16
-  m_RefResolutionX: 320
-  m_RefResolutionY: 180
+  m_RefResolutionX: 426
+  m_RefResolutionY: 240
   m_UpscaleRT: 0
-  m_PixelSnapping: 1
+  m_PixelSnapping: 0
   m_CropFrameX: 0
   m_CropFrameY: 0
   m_StretchFill: 0
@@ -120,10 +120,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f53f511d71bfe46409405da1f843e195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHorizontalVelocity: 10
-  maxVerticalVelocity: 10
+  maxHorizontalVelocity: 100
+  maxVerticalVelocity: 100
   target: {fileID: 0}
-  offset: {x: 0, y: 2, z: -1}
+  horizontalSmoothTime: 0.1
+  verticalSmoothTime: 0.1
+  playerFrameScale: {x: 1, y: 2.5}
+  drawDebugFrame: 1
+--- !u!114 &8176094373653992748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411499508074586240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e631581f04409a48a2d36d0c721d725, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  debugRays: 1
 --- !u!61 &411499508074586266
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -165,27 +184,9 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &411499508074586265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 411499508074586240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34e886247adc47e42958d98fc194b1b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  horizontalRayCount: 3
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 256
-  verticalRayCount: 3
-  debugRays: 0

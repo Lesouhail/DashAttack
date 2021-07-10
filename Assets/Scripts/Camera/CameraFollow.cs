@@ -6,29 +6,17 @@
     using DashAttack.Physics;
     using UnityEngine;
 
-    public class CameraFollow : PhysicsObjects
+    public class CameraFollow : PhysicsObject
     {
-        [SerializeField] private Transform target;
+        [SerializeField] private PhysicsObject player;
         [SerializeField] private float horizontalSmoothTime = 0.2f;
         [SerializeField] private float verticalSmoothTime = 0.2f;
 
         [SerializeField] private Vector2 playerFrameScale;
         [SerializeField] private bool drawDebugFrame;
 
-        private HorizontalMovement HorizontalMovement { get; set; }
-        private VerticalMovement VerticalMovement { get; set; }
-        private DashMovement Dash { get; set; }
-
         private float currentXVelocity;
         private float currentYVelocity;
-
-        protected override void Start()
-        {
-            base.Start();
-            HorizontalMovement = target.GetComponent<HorizontalMovement>();
-            VerticalMovement = target.GetComponent<VerticalMovement>();
-            Dash = target.GetComponent<DashMovement>();
-        }
 
         private void LateUpdate()
         {
@@ -37,32 +25,33 @@
                 DebugFrame();
             }
 
-            bool isOutOfFrameOnX = Mathf.Abs(target.position.x - transform.position.x) > playerFrameScale.x;
-            bool isOutOfFrameOnY = Mathf.Abs(target.position.y - transform.position.y) > playerFrameScale.y;
+            bool isOutOfFrameOnX = Mathf.Abs(player.transform.position.x - transform.position.x) > playerFrameScale.x;
+            bool isOutOfFrameOnY = Mathf.Abs(player.transform.position.y - transform.position.y) > playerFrameScale.y;
 
             Vector2 deltaPosition = Vector2.zero;
 
             if (isOutOfFrameOnX)
             {
-                var deltaX = target.position.x - transform.position.x;
+                var deltaX = player.transform.position.x - transform.position.x;
                 var directionX = Mathf.Sign(deltaX);
                 deltaPosition.x = deltaX - playerFrameScale.x * directionX;
             }
             else
             {
-                var smoothX = Mathf.SmoothDamp(transform.position.x, target.position.x, ref currentXVelocity, horizontalSmoothTime);
+                var smoothX = Mathf.SmoothDamp(transform.position.x, player.transform.position.x, ref currentXVelocity, horizontalSmoothTime, Mathf.Infinity, Time.smoothDeltaTime);
                 deltaPosition.x = smoothX - transform.position.x;
             }
 
             if (isOutOfFrameOnY)
             {
-                var deltaY = target.position.y - transform.position.y;
+                var deltaY = player.transform.position.y - transform.position.y;
                 var directionY = Mathf.Sign(deltaY);
                 deltaPosition.y = deltaY - playerFrameScale.y * directionY;
             }
             else
             {
-                var smoothY = Mathf.SmoothDamp(transform.position.y, target.position.y, ref currentYVelocity, verticalSmoothTime);
+                var smoothY = Mathf.SmoothDamp(transform.position.y, player.transform.position.y, ref currentYVelocity, verticalSmoothTime, Mathf.Infinity, Time.smoothDeltaTime);
+                //var smoothY = Mathf.Lerp(player.transform.position.y, transform.position.y, verticalSmoothTime * Time.deltaTime);
                 deltaPosition.y = smoothY - transform.position.y;
             }
 

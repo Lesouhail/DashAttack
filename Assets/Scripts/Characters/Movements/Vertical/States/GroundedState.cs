@@ -14,13 +14,13 @@
 
         protected override bool HasTransition()
         {
-            if (!owner.PhysicsComponent.Collisions.Below)
+            if (!owner.PhysicsObject.Collisions.Below)
             {
                 stateMachine.TransitionTo(Falling);
                 return true;
             }
 
-            if (owner.Input && owner.EarlyJumpCounter <= owner.JumpEarlyBuffer)
+            if (owner.Inputs.JumpInput && owner.Inputs.JumpInputBuffer <= owner.Player.EarlyJumpBuffer)
             {
                 stateMachine.TransitionTo(Rising);
                 return true;

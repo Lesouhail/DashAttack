@@ -15,25 +15,23 @@
 
         protected override bool HasTransition()
         {
-            if (owner.PhysicsComponent.Collisions.Above)
+            if (owner.PhysicsObject.Collisions.Above)
             {
                 stateMachine.TransitionTo(Falling);
                 return true;
             }
 
-            if (!owner.Input &&
-                (owner.transform.position.y - owner.JumpStartPosition >= owner.MinJumpHeight))
+            if (!owner.Inputs.JumpInput)
             {
-                stateMachine.TransitionTo(Falling);
+                stateMachine.TransitionTo(Hanging);
                 return true;
             }
             else
             {
-                var nextVelocity = owner.CurrentVerticalVelocity - (owner.Gravity * Time.deltaTime);
-                if (nextVelocity < 0 ||
-                    owner.DeltaPosition(nextVelocity) < 0.00001f)
+                var nextVelocity = owner.CurrentVerticalVelocity - (owner.Player.Gravity * Time.deltaTime);
+                if (nextVelocity < 0.000_01f)
                 {
-                    stateMachine.TransitionTo(Falling);
+                    stateMachine.TransitionTo(Hanging);
                     return true;
                 }
             }

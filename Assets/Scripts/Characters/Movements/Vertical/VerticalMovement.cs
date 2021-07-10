@@ -8,145 +8,100 @@
     using static DashAttack.Utility.StateCallBack;
     using DashAttack.Characters.Movements.Vertical.States;
 
-    [RequireComponent(typeof(PhysicsObjects))]
-    public class VerticalMovement : VerticalMovementBase<VerticalMovement, VerticalState>
+    [RequireComponent(typeof(PhysicsObject))]
+    public sealed class VerticalMovement : Ability<VerticalMovement, VerticalState>
     {
-        [SerializeField] private float jumpEarlyBuffer;
-        [SerializeField] private float jumpLateBuffer;
-        [SerializeField] private float wallSlideMultiplier;
-        [SerializeField] private float wallStickTime;
+        public Player Player { get; private set; }
+        public PhysicsObject PhysicsObject { get; private set; }
+        public PlayerInputs Inputs { get; set; }
 
-        public float JumpEarlyBuffer => jumpEarlyBuffer;
-        public float JumpLateBuffer => jumpLateBuffer;
-        public float WallStickTime => wallStickTime;
+        public float HangTimeCounter { get; private set; }
+        public float CurrentVerticalVelocity { get; private set; }
 
-        public float EarlyJumpCounter { get; private set; }
-        public float LateJumpCounter { get; private set; }
-        public float WallStickCounter { get; private set; }
-
-        public override float Gravity => 2 * MaxJumpHeight / Mathf.Pow(JumpTime, 2);
-        public bool WallJumpThisFrame { get; protected set; }
-
-        public bool LastFrameInput { get; private set; }
-
-        public event Action TakingOff;
-        public event Action StartedFall;
-        public event Action Landing;
-
-        public override bool Input
+        protected override void Awake()
         {
-            get => base.Input;
-            set
-            {
-                base.Input = value;
-                if (value == true && LastFrameInput == false)
-                {
-                    EarlyJumpCounter = 0;
-                }
-            }
-        }
-
-        public bool IsLocked
-        {
-            get => StateMachine.IsLocked;
-            set
-            {
-                if (value)
-                {
-                    CurrentVerticalVelocity = 0;
-                    CurrentWallJumpVelocity = Vector2.zero;
-                }
-                StateMachine.IsLocked = value;
-            }
-        }
-
-        protected Vector2 CurrentWallJumpVelocity { get; set; }
-
-        protected override void Update()
-        {
-            base.Update();
-            if (Input)
-            {
-                EarlyJumpCounter += Time.deltaTime;
-            }
-
-            LastFrameInput = Input;
+            base.Awake();
+            Player = GetComponent<Player>();
+            PhysicsObject = GetComponent<PhysicsObject>();
         }
 
         protected override void InitStateMachine()
         {
             StateMachine.Init(
                 Rest,
-                new VerticalRestState(this, StateMachine),
+                new RestState(this, StateMachine),
                 new GroundedState(this, StateMachine),
                 new RisingState(this, StateMachine),
                 new FallingState(this, StateMachine),
-                new WallSlidingState(this, StateMachine));
+                new WallSlidingState(this, StateMachine),
+                new HangingState(this, StateMachine));
+
+            // --- REST STATE ---
+            Subscribe(Rest, OnStateEnter, () => CurrentVerticalVelocity = 0);
 
             // --- GROUNDED STATE ---
-            Subscribe(Grounded, OnStateEnter, () => Landing?.Invoke());
             Subscribe(Grounded, OnUpdate, () =>
             {
-                // Apply a constant downward force equals to one frame of gravity in order to trigger collision detection
                 CurrentVerticalVelocity = 0;
-                Fall(true);
+                Fall(Player.FallMultiplier);
             });
 
-            // --- FALLING STATE ---
-            Subscribe(Falling, OnStateEnter, () =>
-            {
-                StartedFall?.Invoke();
-                LateJumpCounter = 0;
-            });
-            Subscribe(Falling, OnUpdate, () =>
-            {
-                LateJumpCounter += Time.deltaTime;
-                Fall(true);
-            });
-
-            Subscribe(Falling, OnStateExit, () => LateJumpCounter = 0);
+            // --- FALING STATE ---
+            Subscribe(Falling, OnUpdate, () => Fall(Player.FallMultiplier));
 
             // --- RISING ---
-            Subscribe(Rising, OnStateEnter, () =>
-            {
-                TakingOff?.Invoke();
-                InitiateJump();
-            });
-            Subscribe(Rising, OnUpdate, () => Fall(false));
+            Subscribe(Rising, OnStateEnter, () => CurrentVerticalVelocity = Player.JumpVelocity);
+            Subscribe(Rising, OnUpdate, () => Fall(1));
             Subscribe(Rising, OnStateExit, () => CurrentVerticalVelocity = 0);
 
             // --- WALL SLIDING STATE ---
-            StateMachine.Subscribe(WallSliding, OnUpdate, () => WallSlide());
-            Subscribe(WallSliding, OnStateExit, () => CurrentVerticalVelocity = 0);
-        }
+            Subscribe(WallSliding, OnUpdate, () => WallSlide());
 
-        private void InitiateJump()
-        {
-            JumpStartPosition = transform.position.y;
-            CurrentVerticalVelocity = JumpVelocity;
-        }
-
-        private void Fall(bool allowFallMultiplier)
-        {
-            var fallMultiplier = allowFallMultiplier ? FallMultiplier : 1;
-            CurrentVerticalVelocity -= Gravity * Time.deltaTime * fallMultiplier;
-
-            if (CurrentVerticalVelocity < -MaxFallVelocity)
+            // --- HANGING STATE ---
+            Subscribe(Hanging, OnUpdate, () =>
             {
-                CurrentVerticalVelocity = -MaxFallVelocity;
+                HangTimeCounter += Time.deltaTime;
+                Fall(Player.HangingFallMultiplier);
+            });
+            Subscribe(Hanging, OnStateExit, () => HangTimeCounter = 0);
+        }
+
+        protected override void OnLock()
+        {
+            CurrentVerticalVelocity = 0;
+        }
+
+        protected override void OnUnlock()
+        {
+            if (!PhysicsObject.Collisions.Below)
+            {
+                StateMachine.TransitionTo(Hanging);
             }
-            PhysicsComponent.AddMovement(new Vector2(0, DeltaPosition(CurrentVerticalVelocity)));
+        }
+
+        private void Fall(float fallMultiplier)
+        {
+            CurrentVerticalVelocity -= Player.Gravity * Time.deltaTime * fallMultiplier;
+
+            if (CurrentVerticalVelocity < -Player.MaxFallVelocity)
+            {
+                CurrentVerticalVelocity = -Player.MaxFallVelocity;
+            }
+
+            PhysicsObject.AddMovement(new Vector2(0, CurrentVerticalVelocity * Time.deltaTime));
         }
 
         private void WallSlide()
         {
-            CurrentVerticalVelocity -= Gravity * wallSlideMultiplier * Time.deltaTime;
-            var wallSlideMaxVelocity = -MaxFallVelocity * wallSlideMultiplier;
+            CurrentVerticalVelocity -= Player.Gravity * Player.WallSlideMultiplier * Time.deltaTime;
+            var wallSlideMaxVelocity = -Player.MaxFallVelocity * Player.WallSlideMultiplier;
+
             if (CurrentVerticalVelocity < wallSlideMaxVelocity)
             {
                 CurrentVerticalVelocity = wallSlideMaxVelocity;
             }
-            PhysicsComponent.AddMovement(new Vector2(0, DeltaPosition(CurrentVerticalVelocity)));
+
+            PhysicsObject.AddMovement(new Vector2(0, CurrentVerticalVelocity * Time.deltaTime));
         }
     }
 
@@ -157,5 +112,6 @@
         Grounded,
         Rising,
         WallSliding,
+        Hanging
     }
 }

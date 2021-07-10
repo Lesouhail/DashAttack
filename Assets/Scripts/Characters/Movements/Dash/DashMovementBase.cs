@@ -13,7 +13,7 @@
         [SerializeField] private float castTime;
         [SerializeField] private float recoveryTime;
 
-        public PhysicsObjects PhysicsComponent { get; private set; }
+        public PhysicsObject PhysicsComponent { get; private set; }
 
         public float DashDistance => dashDistance;
         public float DashTime => dashTime;
@@ -27,11 +27,5 @@
         public virtual float DeltaPosition(float velocity) => velocity * Time.deltaTime + (Decceleration * Mathf.Pow(Time.deltaTime, 2) / 2);
 
         public float CurrentVelocity { get; protected set; }
-
-        protected override void Start()
-        {
-            base.Start();
-            PhysicsComponent = GetComponent<PhysicsObjects>();
-        }
     }
 }

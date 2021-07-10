@@ -13,7 +13,7 @@
 
         protected override bool HasTransition()
         {
-            if (owner.DashCastingCounter >= owner.CastTime)
+            if (owner.DashCastingCounter >= owner.Player.CastTime)
             {
                 stateMachine.TransitionTo(Dashing);
                 return true;

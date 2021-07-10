@@ -1,51 +1,29 @@
 ﻿namespace DashAttack.Characters.Movements.Dash
 {
-    using System;
     using DashAttack.Characters.Movements.Dash.States;
+    using DashAttack.Physics;
     using UnityEngine;
 
     using static DashAttack.Characters.Movements.Dash.DashState;
     using static DashAttack.Utility.StateCallBack;
 
-    public class DashMovement : DashMovementBase<DashMovement, DashState>
+    public class DashMovement : Ability<DashMovement, DashState>
     {
-        public bool Input { get; set; }
-        public bool LastFrameInput { get; private set; }
-        public Vector2 Direction
-        {
-            get => direction;
-            set
-            {
-                if (CurrentState == Casting)
-                {
-                    direction = value;
-                }
-            }
-        }
-        public bool CanDash { get; set; }
+        public float CurrentVelocity { get; private set; }
+
+        public PlayerInputs Inputs { get; set; }
+        public Player Player { get; set; }
+        public PhysicsObject PhysicsObject { get; set; }
+
         public float DashCastingCounter { get; private set; }
         public float DashCounter { get; private set; }
         public float DashRecoveryCounter { get; private set; }
 
-        public event Action<Vector2> DashStarted;
-        public event Action DashEnded;
-
-        private Vector2 direction;
-
-        public void Reset()
+        protected override void Awake()
         {
-            CanDash = true;
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-            if (PhysicsComponent.Collisions.Below)
-            {
-                CanDash = true;
-            }
-            LastFrameInput = Input;
-            LastFrameInput = Input;
+            base.Awake();
+            Player = GetComponent<Player>();
+            PhysicsObject = GetComponent<PhysicsObject>();
         }
 
         protected override void InitStateMachine()
@@ -57,12 +35,11 @@
                 new DashingState(this, StateMachine),
                 new DashRecoveryState(this, StateMachine));
 
+            // --- Rest ---
+            Subscribe(Rest, OnStateEnter, () => CurrentVelocity = 0);
+
             // --- Casting ---
-            Subscribe(Casting, OnStateEnter, () =>
-            {
-                DashStarted?.Invoke(Direction);
-                Cast();
-            });
+            Subscribe(Casting, OnStateEnter, () => DashCastingCounter = 0);
             Subscribe(Casting, OnUpdate, () => DashCastingCounter += Time.deltaTime);
 
             // --- Dashing ---
@@ -70,7 +47,7 @@
             Subscribe(Dashing, OnUpdate, () =>
             {
                 DashCounter += Time.deltaTime;
-                Deccelerate();
+                Decelerate();
             });
 
             // --- Recovering ---
@@ -78,27 +55,20 @@
             Subscribe(Recovering, OnUpdate, () =>
             {
                 DashRecoveryCounter += Time.deltaTime;
-                Deccelerate();
+                Decelerate();
             });
-            Subscribe(Recovering, OnStateExit, () => DashEnded?.Invoke());
         }
 
-        private void Deccelerate()
+        private void Decelerate()
         {
-            CurrentVelocity -= Decceleration * Time.deltaTime;
-            PhysicsComponent.AddMovement(Direction * DeltaPosition(CurrentVelocity));
+            CurrentVelocity -= Player.DashDecceleration * Time.deltaTime;
+            PhysicsObject.AddMovement(Inputs.DashDirection * Player.GetDashDeltaPosition(CurrentVelocity));
         }
 
         private void Initiate()
         {
             DashCounter = 0;
-            CurrentVelocity = InitialVelocity;
-        }
-
-        private void Cast()
-        {
-            CanDash = false;
-            DashCastingCounter = 0;
+            CurrentVelocity = Player.DashVelocity;
         }
     }
 
