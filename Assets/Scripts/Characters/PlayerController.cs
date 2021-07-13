@@ -29,7 +29,7 @@
             VerticalMovement = GetComponent<VerticalMovement>();
             Dash = GetComponent<DashMovement>();
 
-            Feedbacks = GetComponent<PlayerFeedbacks>();
+            Feedbacks = GetComponentInChildren<PlayerFeedbacks>();
 
             HorizontalMovement.Inputs = PlayerInputs;
             VerticalMovement.Inputs = PlayerInputs;
