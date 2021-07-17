@@ -1,81 +1,99 @@
 ﻿namespace DashAttack.Characters
 {
     using System.Collections;
+    using System.Linq;
     using DashAttack.Characters.Movements.Dash;
     using DashAttack.Characters.Movements.Vertical;
     using UnityEngine;
-
+    using UnityEngine.Experimental.Rendering.Universal;
     using static DashAttack.Utility.StateCallBack;
 
     public class PlayerFeedbacks : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer dashRenderer;
-        [SerializeField] private Color noDashColor;
+        [SerializeField] private Color activeFragmentColor;
+        [SerializeField] private Color unActiveFragmentColor;
+        [SerializeField] private GameObject[] fragments;
         [SerializeField] private float squashTime;
         [SerializeField] private float squashDepth;
 
         public PlayerInputs Inputs { get; set; }
-        private Color BaseColor { get; set; }
 
         private VerticalMovement VerticalMovement { get; set; }
+        private DashMovement Dash { get; set; }
 
         private float squashCounter { get; set; }
         private float squashSpeed => squashDepth / squashTime;
 
         private IEnumerator LandSquash { get; set; }
         private IEnumerator JumpStretch { get; set; }
+        private IEnumerator DashStretch { get; set; }
+
+        private Fragment[] Fragments { get; set; }
 
         private void Start()
         {
             VerticalMovement = GetComponentInParent<VerticalMovement>();
-            BaseColor = dashRenderer.color;
+            Dash = GetComponentInParent<DashMovement>();
+
+            Fragments = fragments.Select(f => new Fragment()
+            {
+                Renderer = f.GetComponent<SpriteRenderer>(),
+                Light = f.GetComponent<Light2D>()
+            })
+            .ToArray();
+
+            foreach (var fragment in Fragments)
+            {
+                fragment.Light.enabled = false;
+                fragment.Renderer.color = unActiveFragmentColor;
+            }
 
             VerticalMovement.Subscribe(VerticalState.Rising, OnStateEnter, () =>
             {
+                Reset();
                 bool isSquash = VerticalMovement.PreviousState != VerticalState.WallSliding;
-
-                if (JumpStretch != null)
-                {
-                    StopCoroutine(JumpStretch);
-                }
-                if (LandSquash != null)
-                {
-                    StopCoroutine(LandSquash);
-                }
-
-                transform.localScale = Vector3.one;
-                JumpStretch = Strech(isSquash);
+                JumpStretch = Stretch(isSquash);
                 StartCoroutine(JumpStretch);
-            });
-
-            VerticalMovement.Subscribe(VerticalState.WallSliding, OnStateEnter, () =>
-            {
-                if (LandSquash != null)
-                {
-                    StopCoroutine(LandSquash);
-                }
-
-                transform.localScale = Vector3.one;
-                LandSquash = Strech(true);
-                StartCoroutine(LandSquash);
             });
 
             VerticalMovement.Subscribe(VerticalState.Grounded, OnStateEnter, () =>
             {
-                if (LandSquash != null)
-                {
-                    StopCoroutine(LandSquash);
-                }
-
-                transform.localScale = Vector3.one;
-                LandSquash = Strech(false);
+                Reset();
+                LandSquash = Stretch(false);
                 StartCoroutine(LandSquash);
             });
+
+            Dash.Subscribe(DashState.Dashing, OnStateEnter, () =>
+            {
+                Reset();
+                bool isSquash = Mathf.Abs(Inputs.DashDirection.y) == 1;
+                DashStretch = Stretch(isSquash);
+                StartCoroutine(DashStretch);
+            });
+        }
+
+        private void Reset()
+        {
+            if (LandSquash != null)
+            {
+                StopCoroutine(LandSquash);
+            }
+
+            if (JumpStretch != null)
+            {
+                StopCoroutine(JumpStretch);
+            }
+
+            if (DashStretch != null)
+            {
+                StopCoroutine(DashStretch);
+            }
+
+            transform.localScale = Vector3.one;
         }
 
         private void LateUpdate()
         {
-            dashRenderer.color = Inputs.CanDash ? BaseColor : noDashColor;
             float direction = Mathf.Sign(Inputs.RunInput);
 
             if (Inputs.RunInput != 0)
@@ -87,7 +105,7 @@
             }
         }
 
-        private IEnumerator Strech(bool isSquash)
+        private IEnumerator Stretch(bool isSquash)
         {
             int direction = isSquash ? 1 : -1;
             squashCounter = 0;
@@ -115,5 +133,11 @@
             }
             transform.localScale = Vector3.one;
         }
+    }
+
+    internal struct Fragment
+    {
+        public SpriteRenderer Renderer;
+        public Light2D Light;
     }
 }
