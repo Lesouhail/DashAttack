@@ -300,7 +300,7 @@ MonoBehaviour:
   - {x: 0.25, y: -0.25, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -78042
+  m_InstanceId: 78808
 --- !u!114 &4319934139879064114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,8 +313,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3ac3ae8c303d524091fbef84ec73894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeFragmentColor: {r: 0, g: 0, b: 0, a: 0}
-  unActiveFragmentColor: {r: 0, g: 0, b: 0, a: 0}
+  activeFragmentColor: {r: 0.13333334, g: 0.68235296, b: 0.81960785, a: 0}
+  unActiveFragmentColor: {r: 0.62352943, g: 0.7137255, b: 0.7529412, a: 0}
   fragments:
   - {fileID: 661304208}
   - {fileID: 944986114882094501}
@@ -550,18 +550,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6962382511929917103}
     m_Modifications:
-    - target: {fileID: 3318832722725456820, guid: 62521c0ccb4a93b418570f5b336c666f, type: 3}
-      propertyPath: m_Color.b
-      value: 0.752
-      objectReference: {fileID: 0}
-    - target: {fileID: 3318832722725456820, guid: 62521c0ccb4a93b418570f5b336c666f, type: 3}
-      propertyPath: m_Color.g
-      value: 0.7122308
-      objectReference: {fileID: 0}
-    - target: {fileID: 3318832722725456820, guid: 62521c0ccb4a93b418570f5b336c666f, type: 3}
-      propertyPath: m_Color.r
-      value: 0.62184614
-      objectReference: {fileID: 0}
     - target: {fileID: 3318832722725456822, guid: 62521c0ccb4a93b418570f5b336c666f, type: 3}
       propertyPath: m_Name
       value: Fragment

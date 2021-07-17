@@ -103,6 +103,17 @@
                     transform.parent.localScale.y,
                     transform.parent.localScale.z);
             }
+
+            if (Inputs.CanDash)
+            {
+                Fragments[0].Renderer.color = activeFragmentColor;
+                Fragments[0].Light.enabled = true;
+            }
+            else
+            {
+                Fragments[0].Renderer.color = unActiveFragmentColor;
+                Fragments[0].Light.enabled = false;
+            }
         }
 
         private IEnumerator Stretch(bool isSquash)
