@@ -22,6 +22,12 @@
         public PhysicsObject PhysicsObject { get; set; }
 
         public float DashCastingCounter { get; private set; }
+
+        internal void Subscribe(DashState dashing, object onStateEnter)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public float DashCounter { get; private set; }
         public float DashRecoveryCounter { get; private set; }
 
@@ -122,6 +128,6 @@
         Rest,
         Casting,
         Dashing,
-        Recovering,
+        Recovering, ur
     }
 }
