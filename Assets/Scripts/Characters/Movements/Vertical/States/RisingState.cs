@@ -21,9 +21,15 @@
                 return true;
             }
 
+            if (owner.Player.IsOnWallAirborne && !owner.IsWallJumpingFrame)
+            {
+                stateMachine.TransitionTo(WallSliding);
+                return true;
+            }
+
             if (!owner.Inputs.JumpInput)
             {
-                stateMachine.TransitionTo(Hanging);
+                stateMachine.TransitionTo(Falling);
                 return true;
             }
             else

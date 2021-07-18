@@ -19,6 +19,10 @@
                 stateMachine.TransitionTo(Falling);
                 return true;
             }
+            if (owner.Player.IsOnWallAirborne)
+            {
+                stateMachine.TransitionTo(WallSliding);
+            }
             return false;
         }
     }

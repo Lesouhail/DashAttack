@@ -22,6 +22,7 @@
         [SerializeField] private float maxFallVelocity;
         [SerializeField] private float fallMultiplier;
         [SerializeField] private float wallSlideMultiplier;
+        [SerializeField] private float wallClimbMultiplier;
 
         [Header("Dash")]
         [SerializeField] private float dashDistance;
@@ -58,6 +59,7 @@
         public float HangingFallMultiplier => hangingFallMultiplier;
         public float FallMultiplier => fallMultiplier;
         public float WallSlideMultiplier => wallSlideMultiplier;
+        public float WallClimbMultiplier => wallClimbMultiplier;
 
         // Buffers Getters
         public float LateJumpBuffer => lateJumpBuffer;
