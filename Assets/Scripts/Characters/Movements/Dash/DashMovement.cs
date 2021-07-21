@@ -12,8 +12,10 @@
     {
         [SerializeField] private int rayCount = 5;
         [SerializeField] private int angleInDegree = 20;
+        [SerializeField] private float maxCorrectionDistance;
         [SerializeField] private LayerMask collidablesLayer;
         [SerializeField] private bool debugRays = true;
+        [SerializeField] private float boxRadius = 1;
 
         public float CurrentVelocity { get; private set; }
 
@@ -22,14 +24,14 @@
         public PhysicsObject PhysicsObject { get; set; }
 
         public float DashCastingCounter { get; private set; }
-
-        internal void Subscribe(DashState dashing, object onStateEnter)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public float DashCounter { get; private set; }
         public float DashRecoveryCounter { get; private set; }
+        public float DashHitCounter { get; private set; }
+
+        private Vector2 CorrectedDashDirection { get; set; }
+        private Collider2D HittedObject { get; set; }
+
+        public bool HasHit => HittedObject != null;
 
         protected override void Awake()
         {
@@ -45,7 +47,8 @@
                 new DashRestState(this, StateMachine),
                 new DashCastingState(this, StateMachine),
                 new DashingState(this, StateMachine),
-                new DashRecoveryState(this, StateMachine));
+                new DashRecoveryState(this, StateMachine),
+                new DashHitState(this, StateMachine));
 
             // --- Rest ---
             Subscribe(Rest, OnStateEnter, () => CurrentVelocity = 0);
@@ -63,8 +66,27 @@
             Subscribe(Dashing, OnUpdate, () =>
             {
                 DashCounter += Time.deltaTime;
+                HittedObject = GetHittedObject();
                 Decelerate();
             });
+
+            // --- Hit ---
+            Subscribe(Hit, OnStateEnter, () =>
+            {
+                DashHitCounter = 0;
+                bool hasHit = HittedObject.gameObject.TryGetComponent<ICollidable>(out var collidable);
+                collidable?.Collide(gameObject);
+                if (hasHit)
+                {
+                    Inputs.CanDash = true;
+                }
+            });
+            Subscribe(Hit, OnUpdate, () =>
+            {
+                DashHitCounter += Time.deltaTime;
+                Decelerate();
+            });
+            Subscribe(Hit, OnStateExit, () => HittedObject = null);
 
             // --- Recovering ---
             Subscribe(Recovering, OnStateEnter, () => DashRecoveryCounter = 0);
@@ -75,6 +97,13 @@
             });
         }
 
+        private Collider2D GetHittedObject()
+            => Physics2D.OverlapBox(
+                point: transform.position,
+                size: new Vector2(boxRadius, boxRadius),
+                angle: 0f,
+                layerMask: collidablesLayer);
+
         private void Decelerate()
         {
             CurrentVelocity -= Player.DashDecceleration * Time.deltaTime;
@@ -83,43 +112,52 @@
 
         private void Initiate()
         {
-            DashCounter = 0;
-            CurrentVelocity = Player.DashVelocity;
+            if (PreviousState != Hit)
+            {
+                DashCounter = 0;
+                CurrentVelocity = Player.DashVelocity;
+            }
         }
 
         private void CorrectPosition()
         {
-            var angleBetweenRays = angleInDegree / (rayCount - 1);
-            var baseAngle = -Vector2.SignedAngle(Vector2.up, Inputs.DashDirection);
+            var other = Physics2D.BoxCast(
+                origin: transform.position,
+                size: new Vector2(boxRadius, boxRadius),
+                angle: 0,
+                direction: Inputs.DashDirection,
+                distance: Player.DashDistance,
+                layerMask: collidablesLayer);
 
-            RaycastHit2D[] hits = new RaycastHit2D[rayCount];
-
-            for (int i = 0; i < rayCount; i++)
+            if (other)
             {
-                var rayPosition = i - ((rayCount - 1) / 2);
-                var angle = baseAngle + (rayPosition * angleBetweenRays);
+                var distance = Vector2.Distance(other.transform.position, transform.position);
+                var perfectPosition = (Vector2)other.transform.position + (distance * -Inputs.DashDirection);
 
-                var x = Mathf.Sin(angle * Mathf.Deg2Rad);
-                var y = Mathf.Cos(angle * Mathf.Deg2Rad);
-
-                var direction = new Vector2(x, y).normalized;
-
-                hits[i] = Physics2D.Raycast(transform.position, direction, Player.DashDistance, collidablesLayer);
+                var correctedPosition = Vector2.MoveTowards(transform.position, perfectPosition, maxCorrectionDistance);
 
                 if (debugRays)
                 {
-                    var target = transform.position + (Vector3)direction.normalized * Player.DashDistance;
-                    Debug.DrawLine(transform.position, target, Color.yellow, 1);
+                    Debug.DrawLine(other.transform.position, correctedPosition, Color.red, 1);
+                    Debug.DrawLine(other.transform.position, perfectPosition, Color.blue, 1);
                 }
-            }
 
-            var other = hits.FirstOrDefault(r => r.collider != null).collider;
-            if (other != null)
-            {
-                var distance = Vector2.Distance(other.transform.position, transform.position);
-                var correctedPosition = (Vector2)other.transform.position + (distance * -Inputs.DashDirection);
+                CorrectedDashDirection = (other.transform.position - transform.position).normalized;
                 transform.position = correctedPosition;
             }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var bottomLeft = new Vector2(transform.position.x - boxRadius / 2, transform.position.y - boxRadius / 2);
+            var topLeft = new Vector2(transform.position.x - boxRadius / 2, transform.position.y + boxRadius / 2);
+            var bottomRight = new Vector2(transform.position.x + boxRadius / 2, transform.position.y - boxRadius / 2);
+            var topRight = new Vector2(transform.position.x + boxRadius / 2, transform.position.y + boxRadius / 2);
+
+            Debug.DrawLine(bottomLeft, topLeft, Color.cyan);
+            Debug.DrawLine(topLeft, topRight, Color.cyan);
+            Debug.DrawLine(topRight, bottomRight, Color.cyan);
+            Debug.DrawLine(bottomRight, bottomLeft, Color.cyan);
         }
     }
 
@@ -128,6 +166,7 @@
         Rest,
         Casting,
         Dashing,
-        Recovering, ur
+        Recovering,
+        Hit
     }
 }

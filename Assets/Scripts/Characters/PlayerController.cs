@@ -19,6 +19,7 @@
         private PlayerFeedbacks Feedbacks { get; set; }
         private DashAttackUltimateInputs Inputs { get; set; }
         private PlayerInputs PlayerInputs { get; set; }
+        private BoxCollider2D DashCollider { get; set; }
 
         protected virtual void Awake()
         {
@@ -121,21 +122,7 @@
 
         protected override bool IgnoreCollisions(GameObject other)
         {
-            if (Dash.CurrentState == DashState.Dashing && collidablesMask.ContainsLayer(other.layer))
-            {
-                OnDashHit(other);
-                return true;
-            }
-            return false;
-        }
-
-        private void OnDashHit(GameObject other)
-        {
-            if (other.TryGetComponent<ICollidable>(out var collidable))
-            {
-                collidable.Collide(gameObject);
-                PlayerInputs.CanDash = true;
-            }
+            return collidablesMask.ContainsLayer(other.layer) && Dash.CurrentState == DashState.Dashing;
         }
     }
 }

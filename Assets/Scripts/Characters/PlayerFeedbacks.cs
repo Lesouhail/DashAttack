@@ -15,15 +15,19 @@
         [SerializeField] private GameObject[] fragments;
         [SerializeField] private float squashTime;
         [SerializeField] private float squashDepth;
+        [SerializeField] private float shakeDuration;
+        [SerializeField] private float shakeIntensity;
 
         public PlayerInputs Inputs { get; set; }
 
         private VerticalMovement VerticalMovement { get; set; }
         private DashMovement Dash { get; set; }
+        private CameraShaker Shaker { get; set; }
 
         private float squashCounter { get; set; }
         private float squashSpeed => squashDepth / squashTime;
 
+        private IEnumerator CameraShake { get; set; }
         private IEnumerator LandSquash { get; set; }
         private IEnumerator JumpStretch { get; set; }
         private IEnumerator DashStretch { get; set; }
@@ -34,6 +38,7 @@
         {
             VerticalMovement = GetComponentInParent<VerticalMovement>();
             Dash = GetComponentInParent<DashMovement>();
+            Shaker = GameObject.Find("Main Camera").GetComponent<CameraShaker>();
 
             Fragments = fragments.Select(f => new Fragment()
             {
@@ -69,6 +74,14 @@
                 bool isSquash = Mathf.Abs(Inputs.DashDirection.y) == 1;
                 DashStretch = Stretch(isSquash);
                 StartCoroutine(DashStretch);
+
+                if (CameraShake != null)
+                {
+                    StopCoroutine(CameraShake);
+                }
+
+                CameraShake = Shaker.Shake(shakeDuration, shakeIntensity);
+                StartCoroutine(CameraShake);
             });
         }
 

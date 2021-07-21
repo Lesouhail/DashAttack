@@ -28,6 +28,7 @@
         [SerializeField] private float dashDistance;
         [SerializeField] private float castTime;
         [SerializeField] private float dashTime;
+        [SerializeField] private float dashHitTime;
         [SerializeField] private float recoveryTime;
 
         [Header("Buffers")]
@@ -48,6 +49,7 @@
         public float DashDistance => dashDistance;
         public float DashTime => dashTime;
         public float CastTime => castTime;
+        public float DashHitTime => dashHitTime;
         public float RecoveryTime => recoveryTime;
 
         // Jump Properties Getters
