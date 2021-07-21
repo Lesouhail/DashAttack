@@ -5,12 +5,9 @@ namespace DashAttack.Physics
     [RequireComponent(typeof(Rigidbody2D))]
     public abstract class PhysicsObject : MonoBehaviour
     {
-        [SerializeField]
-        private float maxHorizontalVelocity = 10;
-        [SerializeField]
-        private float maxVerticalVelocity = 10;
-        [SerializeField]
-        private ICollisionChecker checker;
+        [SerializeField] private float maxHorizontalVelocity = 10;
+        [SerializeField] private float maxVerticalVelocity = 10;
+        [SerializeField] private ICollisionChecker checker;
 
         public Collision Collisions => checker.Collisions;
         public Collision LastFrameCollisions { get; private set; }

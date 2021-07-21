@@ -14,6 +14,7 @@ namespace DashAttack
 
             while (timeElapsed < duration)
             {
+                transform.localPosition = Vector2.zero;
                 Vector3 currentPos = transform.position;
                 var rnd = Random.insideUnitCircle;
 
@@ -23,10 +24,12 @@ namespace DashAttack
                     currentPos.z);
 
                 timeElapsed += Time.deltaTime;
-                currentIntensity -= decreaseSpeed * Time.deltaTime;
+                currentIntensity -= decreaseSpeed * Time.unscaledDeltaTime;
 
                 yield return null;
             }
+
+            transform.localPosition = Vector2.zero;
         }
     }
 }
