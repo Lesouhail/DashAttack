@@ -7,13 +7,18 @@
 
     public class Collidable : MonoBehaviour, ICollidable
     {
+        [SerializeField] private float flashDuration = 0.15f;
+        [SerializeField] private float maxFlashIntensity = 1;
+        [SerializeField] private float maxFlashRadius = 2;
+        [SerializeField] private float freezeFrameDuration = 0.1f;
+        [SerializeField] private float freezeFrameModifier = 0.2f;
+
         public float CollisionDisablingTime { get; private set; } = 1;
         private bool IgnoreCollisions { get; set; }
         private SpriteRenderer Renderer { get; set; }
         private Light2D Light { get; set; }
         private BoxCollider2D Collider { get; set; }
         private ParticleSystem ParticleSystem { get; set; }
-        private float lightFlashDuration { get; set; } = .3f;
 
         private void Start()
         {
@@ -41,8 +46,8 @@
         private IEnumerator FreezeFrame()
         {
             var baseTimeScale = Time.timeScale;
-            Time.timeScale = 0.18f;
-            yield return new WaitForSecondsRealtime(0.085f);
+            Time.timeScale = freezeFrameModifier;
+            yield return new WaitForSecondsRealtime(freezeFrameDuration);
             Time.timeScale = baseTimeScale;
         }
 
@@ -56,22 +61,26 @@
             var baseRadius = Light.pointLightOuterRadius;
             var baseColor = Light.color;
 
-            Light.intensity = 1;
-            var lightDecreaseSpeed = Light.color.a / lightFlashDuration;
+            var intensitySpeed = maxFlashIntensity / flashDuration;
+            var radiusSpeed = maxFlashRadius / flashDuration;
+
+            Light.intensity = 0;
+            Light.pointLightOuterRadius = 0;
 
             var timer = 0f;
-            while (timer < lightFlashDuration)
+            while (timer < flashDuration)
             {
-                Light.color = new Color(baseColor.r, baseColor.g, baseColor.b, Light.color.a - (lightDecreaseSpeed * Time.deltaTime));
-                Light.pointLightOuterRadius += 2 * Time.deltaTime;
+                Light.intensity += intensitySpeed * Time.deltaTime;
+                Light.pointLightOuterRadius += radiusSpeed * Time.deltaTime;
                 timer += Time.unscaledDeltaTime;
+
                 yield return null;
             }
-            Light.enabled = false;
 
+            Light.enabled = false;
             Time.timeScale = 1;
 
-            yield return new WaitForSeconds(CollisionDisablingTime - lightFlashDuration);
+            yield return new WaitForSeconds(CollisionDisablingTime - flashDuration);
 
             Renderer.enabled = true;
             IgnoreCollisions = false;

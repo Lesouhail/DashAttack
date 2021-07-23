@@ -73,6 +73,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be50b9e8255c44a49a242aeacadf74c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashDuration: 0.18
+  maxFlashIntensity: 2.12
+  maxFlashRadius: 3.7
+  freezeFrameDuration: 0.08
+  freezeFrameModifier: 0.2
 --- !u!198 &6735623312147337314
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4952,7 +4957,7 @@ MonoBehaviour:
   m_ComponentVersion: 1
   m_LightType: 3
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.851
+  m_FalloffIntensity: 0.824
   m_Color: {r: 0.13333334, g: 0.68235296, b: 0.81960785, a: 1}
   m_Intensity: 0.25
   m_LightVolumeIntensity: 2.41
@@ -5003,8 +5008,8 @@ MonoBehaviour:
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 0.3
-  m_PointLightOuterRadius: 3.42
+  m_PointLightInnerRadius: 0.4
+  m_PointLightOuterRadius: 3.31
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
