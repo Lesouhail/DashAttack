@@ -16,8 +16,10 @@
         private HorizontalMovement HorizontalMovement { get; set; }
         private VerticalMovement VerticalMovement { get; set; }
         private DashMovement Dash { get; set; }
+        private PlayerFeedbacks Feedbacks { get; set; }
         private DashAttackUltimateInputs Inputs { get; set; }
         private PlayerInputs PlayerInputs { get; set; }
+        private BoxCollider2D DashCollider { get; set; }
 
         protected virtual void Awake()
         {
@@ -28,9 +30,13 @@
             VerticalMovement = GetComponent<VerticalMovement>();
             Dash = GetComponent<DashMovement>();
 
+            Feedbacks = GetComponentInChildren<PlayerFeedbacks>();
+
             HorizontalMovement.Inputs = PlayerInputs;
             VerticalMovement.Inputs = PlayerInputs;
             Dash.Inputs = PlayerInputs;
+
+            Feedbacks.Inputs = PlayerInputs;
         }
 
         protected override void Start()
@@ -116,21 +122,7 @@
 
         protected override bool IgnoreCollisions(GameObject other)
         {
-            if (Dash.CurrentState == DashState.Dashing && collidablesMask.ContainsLayer(other.layer))
-            {
-                OnDashHit(other);
-                return true;
-            }
-            return false;
-        }
-
-        private void OnDashHit(GameObject other)
-        {
-            if (other.TryGetComponent<ICollidable>(out var collidable))
-            {
-                collidable.Collide(gameObject);
-                PlayerInputs.CanDash = true;
-            }
+            return collidablesMask.ContainsLayer(other.layer) && Dash.CurrentState == DashState.Dashing;
         }
     }
 }

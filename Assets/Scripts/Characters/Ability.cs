@@ -35,6 +35,7 @@
             InitStateMachine();
         }
 
+
         protected virtual void Update()
         {
             StateMachine.Update();

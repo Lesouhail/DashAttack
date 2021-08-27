@@ -17,12 +17,18 @@
 
         public float HangTimeCounter { get; private set; }
         public float CurrentVerticalVelocity { get; private set; }
+        public bool IsWallJumpingFrame { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
             Player = GetComponent<Player>();
             PhysicsObject = GetComponent<PhysicsObject>();
+        }
+
+        private void LateUpdate()
+        {
+            IsWallJumpingFrame = false;
         }
 
         protected override void InitStateMachine()
@@ -47,12 +53,19 @@
             });
 
             // --- FALING STATE ---
+            Subscribe(Falling, OnStateEnter, () => CurrentVerticalVelocity = 0);
             Subscribe(Falling, OnUpdate, () => Fall(Player.FallMultiplier));
 
             // --- RISING ---
-            Subscribe(Rising, OnStateEnter, () => CurrentVerticalVelocity = Player.JumpVelocity);
+            Subscribe(Rising, OnStateEnter, () =>
+            {
+                if (PreviousState == WallSliding)
+                {
+                    IsWallJumpingFrame = true;
+                }
+                CurrentVerticalVelocity = Player.JumpVelocity;
+            });
             Subscribe(Rising, OnUpdate, () => Fall(1));
-            Subscribe(Rising, OnStateExit, () => CurrentVerticalVelocity = 0);
 
             // --- WALL SLIDING STATE ---
             Subscribe(WallSliding, OnUpdate, () => WallSlide());
@@ -93,7 +106,8 @@
 
         private void WallSlide()
         {
-            CurrentVerticalVelocity -= Player.Gravity * Player.WallSlideMultiplier * Time.deltaTime;
+            float gravityMod = CurrentVerticalVelocity > 0 ? Player.WallClimbMultiplier : Player.WallSlideMultiplier;
+            CurrentVerticalVelocity -= Player.Gravity * gravityMod * Time.deltaTime;
             var wallSlideMaxVelocity = -Player.MaxFallVelocity * Player.WallSlideMultiplier;
 
             if (CurrentVerticalVelocity < wallSlideMaxVelocity)

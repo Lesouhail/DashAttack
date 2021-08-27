@@ -35,7 +35,7 @@
                 return true;
             }
 
-            if (Mathf.Abs(owner.CurrentVelocity) == owner.Player.MaxSpeed)
+            if (Mathf.Abs(owner.CurrentVelocity) == owner.Player.MaxSpeed / Mathf.Abs(owner.Inputs.RunInput))
             {
                 stateMachine.TransitionTo(AtApex);
                 return true;

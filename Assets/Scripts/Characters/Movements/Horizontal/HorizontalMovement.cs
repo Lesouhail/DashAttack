@@ -11,6 +11,8 @@
     [RequireComponent(typeof(PhysicsObject))]
     public class HorizontalMovement : Ability<HorizontalMovement, HorizontalState>
     {
+        [SerializeField] private LayerMask groundLayer;
+
         public float CurrentVelocity { get; private set; }
         public bool IsWallJumpFrame { get; private set; }
         private bool IsWallJumping { get; set; }
@@ -88,6 +90,11 @@
                 ? CurrentVelocity - deceleration * Mathf.Sign(CurrentVelocity)
                 : 0;
 
+            if (IsGonnaFall())
+            {
+                CurrentVelocity = 0;
+            }
+
             PhysicsObject.AddMovement(new Vector2(CurrentVelocity * Time.deltaTime, 0));
         }
 
@@ -98,14 +105,33 @@
                 : Player.TurningForce;
 
             CurrentVelocity -= deceleration * Mathf.Sign(CurrentVelocity);
+            if (IsGonnaFall())
+            {
+                CurrentVelocity = 0;
+            }
             PhysicsObject.AddMovement(new Vector2(CurrentVelocity * Time.deltaTime, 0));
         }
 
         private void Accelerate()
         {
             CurrentVelocity += Player.Acceleration * Inputs.RunInput;
-            CurrentVelocity = Mathf.Clamp(CurrentVelocity, -Player.MaxSpeed, Player.MaxSpeed);
+            float maxSpeed = Player.MaxSpeed / Mathf.Abs(Inputs.RunInput);
+
+            CurrentVelocity = Mathf.Clamp(CurrentVelocity, -maxSpeed, maxSpeed);
             PhysicsObject.AddMovement(new Vector2(CurrentVelocity * Time.deltaTime, 0));
+        }
+
+        private bool IsGonnaFall()
+        {
+            if (CurrentVelocity == 0 || !PhysicsObject.Collisions.Below)
+            {
+                return false;
+            }
+            var originX = transform.position.x + CurrentVelocity * Time.deltaTime;
+            var originY = transform.position.y;
+
+            var rayOrigin = new Vector2(originX, originY);
+            return !Physics2D.Raycast(rayOrigin, Vector2.down, 1f, groundLayer);
         }
     }
 

@@ -57,6 +57,14 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Dpad"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""e0971ebb-88bc-4fa1-98b0-e6b770bd14fe"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -279,6 +287,17 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
                     ""action"": ""DashDirection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f042f6a-8aa5-4809-b8c1-9a35ab7ed896"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -859,6 +878,7 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
         m_Player_CancelJump = m_Player.FindAction("CancelJump", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_DashDirection = m_Player.FindAction("DashDirection", throwIfNotFound: true);
+        m_Player_Restart = m_Player.FindAction("Restart", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -925,6 +945,7 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_CancelJump;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_DashDirection;
+    private readonly InputAction m_Player_Restart;
     public struct PlayerActions
     {
         private @DashAttackUltimateInputs m_Wrapper;
@@ -934,6 +955,7 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
         public InputAction @CancelJump => m_Wrapper.m_Player_CancelJump;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @DashDirection => m_Wrapper.m_Player_DashDirection;
+        public InputAction @Restart => m_Wrapper.m_Player_Restart;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -958,6 +980,9 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
                 @DashDirection.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDashDirection;
                 @DashDirection.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDashDirection;
                 @DashDirection.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDashDirection;
+                @Restart.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
+                @Restart.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
+                @Restart.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRestart;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -977,6 +1002,9 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
                 @DashDirection.started += instance.OnDashDirection;
                 @DashDirection.performed += instance.OnDashDirection;
                 @DashDirection.canceled += instance.OnDashDirection;
+                @Restart.started += instance.OnRestart;
+                @Restart.performed += instance.OnRestart;
+                @Restart.canceled += instance.OnRestart;
             }
         }
     }
@@ -1138,6 +1166,7 @@ public class @DashAttackUltimateInputs : IInputActionCollection, IDisposable
         void OnCancelJump(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnDashDirection(InputAction.CallbackContext context);
+        void OnRestart(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

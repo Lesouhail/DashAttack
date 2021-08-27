@@ -14,6 +14,12 @@
 
         protected override bool HasTransition()
         {
+            if (owner.HasHit)
+            {
+                stateMachine.TransitionTo(Hit);
+                return true;
+            }
+
             if (owner.DashCounter >= owner.Player.DashTime)
             {
                 stateMachine.TransitionTo(Recovering);

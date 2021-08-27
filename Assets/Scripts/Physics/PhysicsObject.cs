@@ -1,23 +1,24 @@
-﻿using UnityEngine;
-
+﻿
 namespace DashAttack.Physics
 {
+    using UnityEngine;
+
     [RequireComponent(typeof(Rigidbody2D))]
     public abstract class PhysicsObject : MonoBehaviour
     {
-        [SerializeField]
-        private float maxHorizontalVelocity = 10;
-        [SerializeField]
-        private float maxVerticalVelocity = 10;
-        [SerializeField]
-        private ICollisionChecker checker;
+        [SerializeField] private float maxHorizontalVelocity = 10;
+        [SerializeField] private float maxVerticalVelocity = 10;
+        [SerializeField] private ICollisionChecker checker;
 
         public Collision Collisions => checker.Collisions;
         public Collision LastFrameCollisions { get; private set; }
         public Vector2 Velocity { get; private set; }
 
+        private Rigidbody2D rb;
+
         private Vector2 deltaPosition;
         // Make sure velocity does not exceeds maximum values
+
         private Vector2 DeltaPosition
         {
             get => deltaPosition;
@@ -30,6 +31,7 @@ namespace DashAttack.Physics
 
         protected virtual void Start()
         {
+            rb = GetComponent<Rigidbody2D>();
             checker = GetComponent<ICollisionChecker>();
             checker.OnCollision += (other) => CollisionEntered(other);
             checker.ShouldIgnoreCollisions = (other) => IgnoreCollisions(other);
@@ -49,8 +51,8 @@ namespace DashAttack.Physics
         // Move the body and reset movementrequest and velocity
         private void Move()
         {
-            transform.Translate(deltaPosition);
-            //rb.MovePosition(rb.position + deltaPosition);
+            //transform.Translate(deltaPosition);
+            rb.MovePosition(rb.position + deltaPosition);
             Velocity = DeltaPosition;
             DeltaPosition = Vector2.zero;
         }
