@@ -1,10 +1,9 @@
 ﻿namespace DashAttack.Characters.Movements.Dash
 {
+    using System.Linq;
     using DashAttack.Characters.Movements.Dash.States;
     using DashAttack.Physics;
-    using System.Linq;
     using UnityEngine;
-
     using static DashAttack.Characters.Movements.Dash.DashState;
     using static DashAttack.Utility.StateCallBack;
 
@@ -131,18 +130,18 @@
 
             if (other)
             {
-                var distance = Vector2.Distance(other.transform.position, transform.position);
-                var perfectPosition = (Vector2)other.transform.position + (distance * -Inputs.DashDirection);
+                var distance = Vector2.Distance(other.collider.transform.position, transform.position);
+                var perfectPosition = (Vector2)other.collider.transform.position + (distance * -Inputs.DashDirection);
 
                 var correctedPosition = Vector2.MoveTowards(transform.position, perfectPosition, maxCorrectionDistance);
 
                 if (debugRays)
                 {
-                    Debug.DrawLine(other.transform.position, correctedPosition, Color.red, 1);
-                    Debug.DrawLine(other.transform.position, perfectPosition, Color.blue, 1);
+                    Debug.DrawLine(other.collider.transform.position, correctedPosition, Color.red, 1);
+                    Debug.DrawLine(other.collider.transform.position, perfectPosition, Color.blue, 1);
                 }
 
-                CorrectedDashDirection = (other.transform.position - transform.position).normalized;
+                CorrectedDashDirection = (other.collider.transform.position - transform.position).normalized;
                 transform.position = correctedPosition;
             }
         }

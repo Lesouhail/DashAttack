@@ -1,7 +1,7 @@
-﻿using DashAttack.Characters.Movements.Dash;
-using DashAttack.Utility;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using DashAttack.Characters.Movements.Dash;
+using DashAttack.Utility;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -22,7 +22,6 @@ namespace DashAttack.VFX
         private ChromaticAberration chroma;
         private PaniniProjection panini;
 
-        // Start is called before the first frame update
         private void Start()
         {
             PlayerDash = GameObject.Find("Player").GetComponent<DashMovement>();
