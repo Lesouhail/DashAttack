@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using DashAttack.Characters.Movements.Dash;
-using DashAttack.Utility;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-
+﻿
 namespace DashAttack.VFX
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using DashAttack.Characters.Movements.Dash;
+    using DashAttack.Utility;
+    using UnityEngine;
+    using UnityEngine.Rendering;
+    using UnityEngine.Rendering.Universal;
     public class ChromaAberration : MonoBehaviour
     {
         [SerializeField] private float time = 0.5f;
