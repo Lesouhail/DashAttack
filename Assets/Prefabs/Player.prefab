@@ -44,7 +44,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 40, y: 22.5, z: 10.88}
+  m_Size: {x: 40, y: 22.5, z: 63.07}
   m_Center: {x: 0, y: 0, z: -8.88}
 --- !u!114 &42803213
 MonoBehaviour:
@@ -62,7 +62,7 @@ MonoBehaviour:
   priority: 1.81
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: d09a7c0ce7317924799e94bcb3732c59, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 9d54c28de5e51ab4194c6933c38180d9, type: 2}
 --- !u!114 &42803212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 1.12
-  chromaIntensity: 0.59
+  chromaIntensity: 27.7
   paniniIntensity: 0.35
 --- !u!1 &1008533027699700209
 GameObject:
@@ -267,14 +267,14 @@ MonoBehaviour:
   wallStickTime: 0.1
   maxJumpHeight: 3.6
   minJumpHeight: 1
-  jumpTime: 0.35
-  hangTime: 0.09
-  hangingFallMultiplier: 0.25
-  maxFallVelocity: 25
-  fallMultiplier: 0.9
+  jumpTime: 0.38
+  hangTime: 0.1
+  hangingFallMultiplier: 0.3
+  maxFallVelocity: 22.5
+  fallMultiplier: 0.825
   wallSlideMultiplier: 0.25
   wallClimbMultiplier: 1
-  dashDistance: 5.5
+  dashDistance: 5.75
   castTime: 0.05
   dashTime: 0.27
   dashHitTime: 0
@@ -392,7 +392,7 @@ MonoBehaviour:
   - {x: 0.25, y: -0.25, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 58760
+  m_InstanceId: 35762
 --- !u!114 &4319934139879064114
 MonoBehaviour:
   m_ObjectHideFlags: 0
