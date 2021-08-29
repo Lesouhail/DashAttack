@@ -67,6 +67,9 @@
         public float LateJumpBuffer => lateJumpBuffer;
         public float EarlyJumpBuffer => earlyJumpBuffer;
 
+        // Singleton 
+        public static Player Instance { get; private set; }
+
         // Run Helpers
         public float Acceleration => maxSpeed / accelerationTime * AerialModifier * Time.deltaTime;
         public float Deceleration => maxSpeed / brakingTime * AerialModifier * Time.deltaTime;
@@ -111,6 +114,14 @@
         private void Start()
         {
             PhysicsComponent = GetComponent<PhysicsObject>();
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 }
