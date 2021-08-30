@@ -120,6 +120,8 @@
 
         private void CorrectPosition()
         {
+            Debug.Log(Inputs.DashDirection);
+
             var other = Physics2D.BoxCast(
                 origin: transform.position,
                 size: new Vector2(boxRadius, boxRadius),
