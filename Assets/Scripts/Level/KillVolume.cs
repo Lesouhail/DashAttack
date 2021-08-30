@@ -15,7 +15,7 @@ namespace DashAttack.Level
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                GameManager.Instance.Restart();
+                GameManager.Instance.Respawn();
             }
         }
     }

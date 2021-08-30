@@ -1,23 +1,25 @@
 ﻿namespace DashAttack.GameManager
 {
+    using DashAttack.Characters;
+
     using UnityEngine;
-    using UnityEngine.InputSystem;
     using UnityEngine.SceneManagement;
 
     public class GameManager : MonoBehaviour
     {
-        public static GameManager Instance => instance;
-        private static GameManager instance;
+        public static GameManager Instance { get; private set; }
         private DashAttackUltimateInputs Inputs { get; set; }
+
+        public Vector2 RespawnPosition { get; set; }
 
         private void Awake()
         {
             Inputs = new DashAttackUltimateInputs();
             Application.targetFrameRate = 60;
 
-            if (instance == null)
+            if (Instance == null)
             {
-                instance = this;
+                Instance = this;
             }
             else
             {
@@ -35,6 +37,11 @@
         public void Restart()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        public void Respawn()
+        {
+            Player.Instance.transform.position = RespawnPosition;
         }
 
         private void OnEnable()

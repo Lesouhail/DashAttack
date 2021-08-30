@@ -17,8 +17,11 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PlayRoom.unity
     guid: 274a4328c64ded84997841eaa677e151
+  - enabled: 1
+    path: Assets/Scenes/Bootstrap.unity
+    guid: 6e36e490e8e4c9a4187013945b4b53ae
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: fad1879a01af6bc4cba0a0d52d197f69, type: 2}

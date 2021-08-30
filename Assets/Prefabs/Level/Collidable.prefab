@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 644391965635834942}
   - component: {fileID: 6735623312147337314}
   - component: {fileID: 7161382858166672927}
+  - component: {fileID: 980150166411783761}
   m_Layer: 7
   m_Name: Collidable
   m_TagString: Untagged
@@ -4910,6 +4911,21 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &980150166411783761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 644391965635834939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d59efaa3810aa544b9d9731cc90bf61d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 0.52
+  waitTime: 1.06
+  wayPointPrefab: {fileID: 7532936602011420828, guid: 00d5b5ad1a589d045bbba5d416a74628, type: 3}
 --- !u!1 &5426501911783397742
 GameObject:
   m_ObjectHideFlags: 0
