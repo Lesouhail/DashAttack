@@ -75,9 +75,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845eeb82b014ac54398f4cd2507c9230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 1.12
-  chromaIntensity: 27.7
-  paniniIntensity: 0.35
+  time: 1
+  chromaIntensity: 0.15
+  paniniIntensity: 0.11
 --- !u!1 &1008533027699700209
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,7 +392,7 @@ MonoBehaviour:
   - {x: 0.25, y: -0.25, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 35762
+  m_InstanceId: -22870
 --- !u!114 &4319934139879064114
 MonoBehaviour:
   m_ObjectHideFlags: 0
