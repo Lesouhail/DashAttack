@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8632117863928779266}
   - component: {fileID: 1672674627359190506}
   m_Layer: 0
-  m_Name: Kill Volume
+  m_Name: Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
