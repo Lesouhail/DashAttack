@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4454255966801001518}
   - component: {fileID: 9049673844864509419}
-  - component: {fileID: 8632117863928779266}
   - component: {fileID: 1672674627359190506}
+  - component: {fileID: 2818909215848127407}
   m_Layer: 0
   m_Name: Hole
   m_TagString: Untagged
@@ -59,18 +59,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8632117863928779266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1890112379205723430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2220805f5fa602478843db86dace2ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &1672674627359190506
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -123,3 +111,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2818909215848127407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890112379205723430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2220805f5fa602478843db86dace2ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

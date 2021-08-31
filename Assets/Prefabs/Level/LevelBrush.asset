@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b24de2caa9fae043b63bb39c12effdc, type: 3}
   m_Name: LevelBrush
   m_EditorClassIdentifier: 
-  selectedPrefab: 3
+  selectedPrefab: 2
   pike: {fileID: 3844244109514236415, guid: c628bf02677d3854687b18a16f6ce11e, type: 3}
   hole: {fileID: 1890112379205723430, guid: cbfea8de7b7f9c147a44b772e6f36e4b, type: 3}
   staticCollidable: {fileID: 188415939611174084, guid: 13110aa4fa5eb7f4ead15549da53c1f1, type: 3}

@@ -8,7 +8,7 @@ namespace DashAttack.Editor
     using UnityEngine;
     using UnityEngine.Tilemaps;
 
-    [CustomGridBrush(false, false, false, "Level")]
+    [CustomGridBrush(false, false, false, "LevelBrush")]
     [CreateAssetMenu]
     public class LevelBrushEditor : GridBrushBase
     {
