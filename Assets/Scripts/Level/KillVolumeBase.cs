@@ -4,14 +4,9 @@ namespace DashAttack.Level
     using DashAttack.GameManager;
     using UnityEngine;
 
-    public class KillVolume : MonoBehaviour
+    public class KillVolumeBase : MonoBehaviour
     {
-        private void Start()
-        {
-            GetComponent<SpriteRenderer>().enabled = false;
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
+        protected virtual void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
@@ -19,4 +14,5 @@ namespace DashAttack.Level
             }
         }
     }
+
 }

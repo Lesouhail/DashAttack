@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b24de2caa9fae043b63bb39c12effdc, type: 3}
+  m_Name: LevelBrush
+  m_EditorClassIdentifier: 
+  selectedPrefab: 3
+  pikePrefab: {fileID: 3844244109514236415, guid: c628bf02677d3854687b18a16f6ce11e, type: 3}
