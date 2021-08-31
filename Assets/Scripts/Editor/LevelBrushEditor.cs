@@ -15,7 +15,10 @@ namespace DashAttack.Editor
         [SerializeField] private LevelPrefab selectedPrefab;
 
         [Header("Prefabs")]
-        [SerializeField] private GameObject pikePrefab;
+        [SerializeField] private GameObject pike;
+        [SerializeField] private GameObject hole;
+        [SerializeField] private GameObject staticCollidable;
+        [SerializeField] private GameObject patrollingCollidable;
 
         public override void Paint(GridLayout grid, GameObject tileMap, Vector3Int position)
         {
@@ -24,6 +27,33 @@ namespace DashAttack.Editor
                 return;
             }
 
+            GameObject prefabToPaint = null;
+
+            switch (selectedPrefab)
+            {
+                case LevelPrefab.Pike:
+                    PaintPikes(tileMap, position);
+                    return;
+
+                case LevelPrefab.StaticCollidable:
+                    prefabToPaint = staticCollidable;
+                    break;
+
+                case LevelPrefab.PatrollingCollidable:
+                    prefabToPaint = patrollingCollidable;
+                    break;
+
+                case LevelPrefab.Hole:
+                    prefabToPaint = hole;
+                    break;
+            }
+
+            var cellCenter = new Vector3(position.x + .5f, position.y + .5f, 0);
+            Instantiate(prefabToPaint, cellCenter, Quaternion.identity, tileMap.transform);
+        }
+
+        private void PaintPikes(GameObject tileMap, Vector3Int position)
+        {
             var adjacentTiles = GetAdjacentTilesDirections(tileMap, position);
 
             if (adjacentTiles.Count != 1)
@@ -59,7 +89,7 @@ namespace DashAttack.Editor
                     break;
             }
 
-            Instantiate(pikePrefab, position + offset, Quaternion.AngleAxis(rotation, Vector3.forward), tileMap.transform);
+            Instantiate(pike, position + offset, Quaternion.AngleAxis(rotation, Vector3.forward), tileMap.transform);
         }
 
         public override void Erase(GridLayout grid, GameObject brushTarget, Vector3Int position)
