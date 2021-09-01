@@ -16,7 +16,7 @@
         [Header("Jump")]
         [SerializeField] private float maxJumpHeight;
         [SerializeField] private float minJumpHeight;
-        [SerializeField] private float jumpTime;
+        [SerializeField] private float jumpDistance;
         [SerializeField] private float hangTime;
         [SerializeField] private float hangingFallMultiplier;
         [SerializeField] private float maxFallVelocity;
@@ -55,7 +55,7 @@
         // Jump Properties Getters
         public float MaxJumpHeight => maxJumpHeight;
         public float MinJumpHeight => minJumpHeight;
-        public float JumpTime => jumpTime;
+        public float JumpDistance => jumpDistance;
         public float HangTime => hangTime;
         public float MaxFallVelocity => maxFallVelocity;
         public float HangingFallMultiplier => hangingFallMultiplier;
@@ -102,6 +102,8 @@
         // Jump Helpers
         public float Gravity => 2 * MaxJumpHeight / Mathf.Pow(JumpTime, 2);
         public virtual float JumpVelocity => Gravity * JumpTime;
+        public float JumpTime => JumpDistance / MaxSpeed / 2;
+
 
         // Dash Helpers
         public float TotalDashingTime => dashTime + recoveryTime;
