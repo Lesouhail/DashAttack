@@ -33,6 +33,12 @@
                 return true;
             }
 
+            if (owner.Inputs.JumpInput && owner.Inputs.CanInAirJump)
+            {
+                stateMachine.TransitionTo(Rising);
+                return true;
+            }
+
             if (owner.PhysicsObject.Collisions.Left ||
                 owner.PhysicsObject.Collisions.Right)
             {

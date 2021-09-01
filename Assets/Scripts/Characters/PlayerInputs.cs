@@ -18,6 +18,7 @@
         public float WallStickBuffer { get; set; }
 
         public bool CanWallJump { get; set; }
+        public bool CanInAirJump { get; set; }
         public bool CanDash { get; set; }
         public bool IsInDashRecovery { get; set; }
     }

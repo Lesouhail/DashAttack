@@ -15,15 +15,16 @@
             get => StateMachine.IsLocked;
             set
             {
-                StateMachine.IsLocked = value;
-                if (IsLocked)
+                if (value == true && !IsLocked)
                 {
                     OnLock();
                 }
-                else
+                else if (value == false && IsLocked)
                 {
                     OnUnlock();
                 }
+
+                StateMachine.IsLocked = value;
             }
         }
 

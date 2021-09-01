@@ -9,7 +9,6 @@
             : base(owner, stateMachine)
         {
         }
-
         public override VerticalState Type => Hanging;
 
         protected override bool HasTransition()
@@ -22,6 +21,12 @@
             if (owner.Player.IsOnWallAirborne)
             {
                 stateMachine.TransitionTo(WallSliding);
+                return true;
+            }
+            if (owner.Inputs.JumpInput && owner.Inputs.CanInAirJump)
+            {
+                stateMachine.TransitionTo(Rising);
+                return true;
             }
             return false;
         }

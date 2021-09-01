@@ -1,12 +1,11 @@
 ﻿namespace DashAttack.Characters.Movements.Vertical
 {
     using System;
-    using UnityEngine;
+    using DashAttack.Characters.Movements.Vertical.States;
     using DashAttack.Physics;
-
+    using UnityEngine;
     using static DashAttack.Characters.Movements.Vertical.VerticalState;
     using static DashAttack.Utility.StateCallBack;
-    using DashAttack.Characters.Movements.Vertical.States;
 
     [RequireComponent(typeof(PhysicsObject))]
     public sealed class VerticalMovement : Ability<VerticalMovement, VerticalState>

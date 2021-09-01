@@ -1,7 +1,7 @@
 ﻿namespace DashAttack.Characters.Movements.Vertical.States
 {
-    using UnityEngine;
     using DashAttack.Utility;
+    using UnityEngine;
     using static VerticalState;
 
     public class RisingState : State<VerticalMovement, VerticalState>
@@ -15,6 +15,7 @@
 
         protected override bool HasTransition()
         {
+
             if (owner.PhysicsObject.Collisions.Above)
             {
                 stateMachine.TransitionTo(Falling);
@@ -41,6 +42,7 @@
                     return true;
                 }
             }
+
             return false;
         }
     }

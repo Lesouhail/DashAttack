@@ -74,6 +74,12 @@
                 PlayerInputs.CanWallJump = false;
                 PlayerInputs.CanDash = true;
             });
+            VerticalMovement.Subscribe(VerticalState.Rising, OnStateEnter, () =>
+            {
+                PlayerInputs.CanInAirJump = false;
+                PlayerInputs.IsInDashRecovery = false;
+            });
+            VerticalMovement.Subscribe(VerticalState.WallSliding, OnStateEnter, () => PlayerInputs.CanInAirJump = false);
             VerticalMovement.Subscribe(VerticalState.Falling, OnUpdate, () => PlayerInputs.FallBuffer += Time.deltaTime);
             VerticalMovement.Subscribe(VerticalState.Falling, OnStateExit, () => PlayerInputs.FallBuffer = 0);
 
@@ -94,6 +100,7 @@
                 VerticalMovement.IsLocked = false;
                 HorizontalMovement.IsLocked = false;
                 PlayerInputs.IsInDashRecovery = true;
+                PlayerInputs.CanInAirJump = true;
             });
             Dash.Subscribe(DashState.Recovering, OnStateExit, () => PlayerInputs.IsInDashRecovery = false);
         }
