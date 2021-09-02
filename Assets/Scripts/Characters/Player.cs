@@ -75,7 +75,7 @@
         public float Deceleration => maxSpeed / brakingTime * AerialModifier * Time.deltaTime;
         public float TurningForce => maxSpeed / turningTime * AerialModifier * Time.deltaTime;
         public float AerialModifier => PhysicsComponent.Collisions.Below ? 1 : airControlAmount;
-        public float WallJumpHorizontalVelocity => WallJumpHoritonalDeceleration / Time.deltaTime * JumpTime;
+        public float WallJumpHorizontalVelocity => WallJumpHoritonalDeceleration / Time.deltaTime * (JumpTime + WallJumpVerticalRisingTime) / 2;
         public bool IsOnWallAirborne
             => (PhysicsComponent.Collisions.Left || PhysicsComponent.Collisions.Right)
             && !PhysicsComponent.Collisions.Below;
@@ -84,20 +84,43 @@
         {
             get
             {
-                float timeAccelerating = JumpTime >= AccelerationTime
-                    ? AccelerationTime
-                    : JumpTime - AccelerationTime;
+                float time = (WallJumpVerticalRisingTime + JumpTime) / 2;
 
-                float timeAtApex = JumpTime - timeAccelerating;
+                float timeAccelerating = time >= AccelerationTime
+                    ? AccelerationTime
+                    : time;
+
+                float timeAtApex = time - timeAccelerating;
                 timeAtApex = timeAtApex > 0 ? timeAtApex : 0;
 
                 float distanceAccelerating = Acceleration / Time.deltaTime * Mathf.Pow(timeAccelerating, 2) / 2;
                 float distanceAtApex = MaxSpeed * timeAtApex;
                 float wallJumpDistance = distanceAccelerating + distanceAtApex;
 
-                return 2 * wallJumpDistance / Mathf.Pow(JumpTime, 2) * Time.deltaTime;
+                return 2 * wallJumpDistance / Mathf.Pow(time, 2) * Time.deltaTime;
             }
         }
+
+        public float WallJumpVerticalRisingTime
+        {
+            get
+            {
+                float velocityHanging = Gravity * HangingFallMultiplier * HangTime;
+                float distanceHanging = Gravity * HangingFallMultiplier * Mathf.Pow(HangTime, 2) / 2;
+
+                float timeFalling = (MaxFallVelocity - velocityHanging) / Gravity;
+                timeFalling = timeFalling <= JumpTime - HangTime ? timeFalling : JumpTime - HangTime;
+                float distanceFalling = Gravity * FallMultiplier * Mathf.Pow(timeFalling, 2) / 2;
+
+                float timeAtApex = JumpTime - HangTime - timeFalling;
+                timeAtApex = JumpTime - HangTime - timeFalling > 0 ? timeAtApex : 0;
+                float distanceAtApex = timeAtApex * MaxFallVelocity;
+
+                return Mathf.Sqrt(2 * (distanceHanging + distanceFalling + distanceAtApex) / Gravity);
+            }
+        }
+
+        public float WallJumpVerticalVelocity => WallJumpVerticalRisingTime * Gravity;
 
         // Jump Helpers
         public float Gravity => 2 * MaxJumpHeight / Mathf.Pow(JumpTime, 2);

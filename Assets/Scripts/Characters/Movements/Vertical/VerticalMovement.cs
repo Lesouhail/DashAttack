@@ -58,11 +58,15 @@
             // --- RISING ---
             Subscribe(Rising, OnStateEnter, () =>
             {
+                var jumpVelocity = Player.JumpVelocity;
                 if (PreviousState == WallSliding)
                 {
                     IsWallJumpingFrame = true;
+                    jumpVelocity = Player.WallJumpVerticalVelocity;
+                    Debug.Log("walljump velocity: " + Player.WallJumpVerticalVelocity);
+                    Debug.Log("jump velocity: " + Player.JumpVelocity);
                 }
-                CurrentVerticalVelocity = Player.JumpVelocity;
+                CurrentVerticalVelocity = jumpVelocity; ;
             });
             Subscribe(Rising, OnUpdate, () => Fall(1));
 

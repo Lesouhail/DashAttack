@@ -18,14 +18,14 @@
                 stateMachine.TransitionTo(Falling);
                 return true;
             }
-            if (owner.Player.IsOnWallAirborne)
-            {
-                stateMachine.TransitionTo(WallSliding);
-                return true;
-            }
             if (owner.Inputs.JumpInput && owner.Inputs.CanInAirJump)
             {
                 stateMachine.TransitionTo(Rising);
+                return true;
+            }
+            if (owner.Player.IsOnWallAirborne)
+            {
+                stateMachine.TransitionTo(WallSliding);
                 return true;
             }
             return false;
